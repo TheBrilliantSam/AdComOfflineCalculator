@@ -1,0 +1,138 @@
+public class BigNum{
+    
+    private double amount;
+    private int exponent;
+    
+    public BigNum(double x, int exp){
+        amount = x;
+        exponent = exp;
+        this.update();
+    }
+    
+    public BigNum(AdComNum value){
+        String disp = value.toString();
+        String components[] = disp.split(" ");
+        String suffix = "";
+        amount = value.getValue();
+        if(components.length < 2){
+            exponent = 0;
+        } else{
+            suffix = components[1];
+            if(suffix.length() == 1){
+                if(suffix.equals("K")){
+                    exponent = 3;
+                }
+                if(suffix.equals("M")){
+                    exponent = 6;
+                }
+                if(suffix.equals("B")){
+                    exponent = 9;
+                }
+                if(suffix.equals("T")){
+                    exponent = 12;
+                }
+            } else{
+                exponent = ((suffix.length() - 2) * 78) + (((int)(suffix.charAt(0)) - 65) * 3) + 15;
+            }
+        }
+    
+        this.update();
+    }
+    
+    public BigNum(String input){
+        String components[] = input.split(" ");
+        String suffix = "";
+        amount = Double.parseDouble(components[0]);
+        if(components.length < 2){
+            exponent = 0;
+        } else{
+            suffix = components[1];
+            if(suffix.length() == 1){
+                if(suffix.equals("K")){
+                    exponent = 3;
+                }
+                if(suffix.equals("M")){
+                    exponent = 6;
+                }
+                if(suffix.equals("B")){
+                    exponent = 9;
+                }
+                if(suffix.equals("T")){
+                    exponent = 12;
+                }
+            } else{
+                exponent = ((suffix.length() - 2) * 78) + (((int)(suffix.charAt(0)) - 65) * 3) + 15;
+            }
+        }
+    
+        this.update();
+    }
+    
+    public double getX(){
+        return amount;
+    }
+    
+    public int getEXP(){
+        return exponent;
+    }
+    
+    public void update(){
+        if(amount != 0){
+            while(amount >= 10.0){
+                amount /= 10;
+                exponent++;
+            }
+            while(amount < 1.0){
+                amount *= 10;
+                exponent--;
+            }
+        } else{
+            exponent = 0;
+        }
+    }
+    
+    public static BigNum add(BigNum d1, BigNum d2){
+        int lowerExp = Math.min(d1.getEXP(), d2.getEXP());
+        double v1 = d1.getX();
+        v1 *= Math.pow(10, d1.getEXP() - lowerExp);
+        double v2 = d2.getX();
+        v2 *= Math.pow(10, d2.getEXP() - lowerExp);
+        BigNum result = new BigNum(v1 + v2, lowerExp);
+        return result;
+    }
+    
+    public static BigNum multiply(BigNum d1, BigNum d2){
+        BigNum result = new BigNum(d1.getX() * d2.getX(), d1.getEXP() + d2.getEXP());
+        return result;
+    }
+    
+    public static BigNum multiply(BigNum d1, double x){
+        BigNum result = new BigNum(d1.getX() * x, d1.getEXP());
+        return result;
+    }
+    
+    public static BigNum multiply(BigNum d1, BigNum d2, BigNum d3){
+        BigNum result = new BigNum(d1.getX() * d2.getX() * d3.getX(), d1.getEXP() + d2.getEXP() + d3.getEXP());
+        return result;
+    }
+    
+    public static BigNum multiply(BigNum d1, BigNum d2, double x){
+        BigNum result = new BigNum(d1.getX() * d2.getX() * x, d1.getEXP() + d2.getEXP());
+        return result;
+    }
+    
+    public static BigNum divide(BigNum d1, BigNum d2){
+        BigNum result = new BigNum(d1.getX() / d2.getX(), d1.getEXP() - d2.getEXP());
+        return result;
+    }
+    
+    public String toString(){
+        String res = amount + "E";
+        if(exponent >= 0){
+            res+= "+";
+        }
+        res+=exponent;
+        return res;
+    }
+    
+}
