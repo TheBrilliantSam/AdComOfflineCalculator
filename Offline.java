@@ -7,7 +7,7 @@ public class Offline {
       
       String vals[][] = new String [bal.getIndustries()][];
       // Generator values for first industry, with first value being the resource amount, followed by generators.
-      vals[0] = new String[] {"0", "5.3 EE", "3.5 CC", "12 AA", "5 B", "80 M", "0"};
+      vals[0] = new String[] {"0", "5.2 EE", "3.5 CC", "12 AA", "5 B", "80 M", "0"};
       // Generator values for second industry, with first value being the resource amount, followed by generators.
       vals[1] = new String[] {"0", "789.99 B", "3500", "0", "0", "0"};
       // Generator values for third industry, with first value being the resource amount, followed by generators.
