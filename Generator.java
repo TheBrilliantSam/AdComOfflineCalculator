@@ -11,7 +11,7 @@ public class Generator{
         commonMult = cm;
     }
     
-    public BigNum prodPerSec(ArrayList<Researcher> rsch, int commonLvl, BigNum amt, boolean boost, int ind){
+    public BNandBool prodPerSec(ArrayList<Researcher> rsch, int commonLvl, BigNum amt, boolean boost, int ind, Time dur){
         double prodBoost = 1.0;
         double luckChance = 0.0;
         double critAmt = 1.0;
@@ -35,22 +35,42 @@ public class Generator{
             //System.out.println(prodBoost);
         }
         
+        int runs = 0;
+        boolean randomized = false;
         //System.out.println(prodBoost + " " + luckChance + " " + critAmt);
         double time = baseTime;
         if(commonLvl != 0){
             time /= initCommon * (int)(Math.pow(commonMult, commonLvl - 1));
+            //System.out.println(initCommon * (int)(Math.pow(commonMult, commonLvl - 1)));
+            //System.out.println(baseTime + " -> " + time);
+            runs = (int)(dur.getSecs() * 1.0 / time);
+            //System.out.println(runs);
+            if(runs < 500 && (luckChance != 0 && critAmt > 1)){
+                randomized = true;
+                int crits = 0;
+                result = (baseProd * prodBoost);
+                for(int i = 0; i < runs; i++){
+                    if(Math.random() < luckChance){
+                        crits++;
+                    }
+                }
+                result = (result * critAmt * crits) + (result * (runs - crits));
+            } else{
+                result = (baseProd * prodBoost) * runs;
+                result *= (luckChance * critAmt) + (1 - luckChance);
+            }
             //System.out.println("Common Boost: " + (initCommon * (Math.pow(commonMult, (commonLvl - 1)))));
             //System.out.println("Time: " + baseTime + " -> " + time);
             //System.out.println(baseProd + " * " + prodBoost + " = " + (baseProd * prodBoost));
-            result = (baseProd * prodBoost) / time;
-            result *= (luckChance * critAmt) + (1 - luckChance);
+            //result = (baseProd * prodBoost) * runs;
+            //result *= (luckChance * critAmt) + (1 - luckChance);
             //System.out.println(result);
             ret = BigNum.multiply(amt, result);
         } else{
             ret = new BigNum(0, 0);
         }
         //System.out.println(ret);
-        return ret;
+        return new BNandBool(ret, randomized);
     }
     
 }
