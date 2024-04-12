@@ -1,12 +1,16 @@
+import java.util.*;
+
 public class Researcher{
     
     private String upgrade;
-    private int initial;
-    private int multiplier;
-    private int industry;
+    private double none;
+    private double initial;
+    private double multiplier;
+    private ArrayList<Integer> industry;
     private int level;
     
-    public Researcher(String upg, int init, int mult, int ind){
+    public Researcher(String upg, double none, double init, double mult, ArrayList<Integer> ind){
+        this.none = none;
         upgrade = upg;
         initial = init;
         multiplier = mult;
@@ -18,12 +22,37 @@ public class Researcher{
         level = x;
     }
     
-    public int getBoost(){
-        return initial * (int)(Math.pow(multiplier, level - 1));
+    public double getBoost(){
+        if(upgrade.equals("prod")){
+            if(level > 0){
+                return initial * (int)(Math.pow(multiplier, level - 1));
+            } else{
+                return none;
+            }
+        } else if(upgrade.equals("crit")){
+            if(level > 0){
+                return none * initial * (int)(Math.pow(multiplier, level - 1));
+            } else{
+                return none;
+            }
+        } else if(upgrade.equals("luck")){ // EXCEPTION: INIT IS ADDED TO EVERY LEVEL, MULT IS BONUS BOOST, SUCH AS IN MINIS
+            double bonus = 0;
+            for(int i = level; i > 1; i--){
+                bonus += ((i - 1) * multiplier);
+            }
+            //System.out.println(bonus);
+            return none + initial * level + bonus;
+        } else{
+            return -1;
+        }
     }
     
-    public int getInd(){
+    public ArrayList<Integer> getInd(){
         return industry;
+    }
+    
+    public boolean thisIndustry(int x){
+        return industry.contains(x);
     }
     
     public int getLvl(){
