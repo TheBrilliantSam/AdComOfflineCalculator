@@ -16,7 +16,8 @@ public class AdComNum{
                 suffix = "";
                 break;
             case 1:
-                suffix = "K";
+                suffix = "";
+                amount *= 1000;
                 break;
             case 2:
                 suffix = "M";
@@ -45,13 +46,22 @@ public class AdComNum{
     }
     
     public String toString(){
-        String val = "" + ((Math.round(value * 100)) / 100.0);
-        String arr[] = val.split("\\."); // Since value is a double, there will always be a decimal point
-        while(arr[1].length() < 2){
-            val += "0";
-            arr[1] += "0"; // If there aren't two digits after the decimal, add zeroes in their place.
+        String val = "";
+        if(suffix.length() > 0){
+            val = "" + ((Math.round(value * 100)) / 100.0);
+            String arr[] = val.split("\\."); // Since value is a double, there will always be a decimal point
+            while(arr[1].length() < 2){
+                val += "0";
+                arr[1] += "0"; // If there aren't two digits after the decimal, add zeroes in their place.
+            }
+            return val + " " + suffix;
+        } else{
+            val = "" + (int)(Math.round(value));
+            if(val.length() > 3){
+                val = val.substring(0, val.length() - 3) + "," + val.substring(val.length() - 3, val.length());
+            }
+            return val;
         }
-        return val + " " + suffix;
     }
     
     public double getValue(){

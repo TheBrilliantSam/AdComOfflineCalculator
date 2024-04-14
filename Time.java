@@ -15,10 +15,78 @@ public class Time{
             hrs++;
         }
     }
+    public Time(int m, int s){
+        hrs = 0;
+        mins = m;
+        secs = s;
+        while (secs > 59){
+            secs -= 60;
+            mins++;
+        }
+        while (mins > 59){
+            mins -= 60;
+            hrs++;
+        }
+    }
+    public Time(String input){
+        input = input.toLowerCase();
+        if(input.indexOf("h") == -1){
+            hrs = 0;
+            if(input.indexOf("m") == -1){
+                mins = 0;
+                if(input.indexOf("s") == -1){
+                    secs = 0;
+                } else{
+                    secs = Integer.parseInt(input.substring(0, input.indexOf("s")));
+                }
+            } else{
+                mins = Integer.parseInt(input.substring(0, input.indexOf("m")));
+                if(input.indexOf("s") == -1){
+                    secs = 0;
+                } else{
+                    secs = Integer.parseInt(input.substring(input.indexOf("m") + 1, input.indexOf("s")));
+                }
+            }
+        } else{
+            hrs = Integer.parseInt(input.substring(0, input.indexOf("h")));
+            if(input.indexOf("m") == -1){
+                mins = 0;
+                if(input.indexOf("s") == -1){
+                    secs = 0;
+                } else{
+                    secs = Integer.parseInt(input.substring(input.indexOf("h") + 1, input.indexOf("s")));
+                }
+            } else{
+                mins = Integer.parseInt(input.substring(input.indexOf("h") + 1, input.indexOf("m")));
+                if(input.indexOf("s") == -1){
+                    secs = 0;
+                } else{
+                    secs = Integer.parseInt(input.substring(input.indexOf("m") + 1, input.indexOf("s")));
+                }
+            }
+        }
+        while (secs > 59){
+            secs -= 60;
+            mins++;
+        }
+        while (mins > 59){
+            mins -= 60;
+            hrs++;
+        }
+    }
     public int getSecs(){
         return hrs * 3600 + mins * 60 + secs;
     }
     public String toString(){
-        return "" + hrs + "h" + mins + "m" + secs + "s";
+        String ret = "" + hrs + "h";
+        if(mins < 10){
+            ret += "0";
+        }
+        ret += mins + "m";
+        if(secs < 10){
+            ret += "0";
+        }
+        ret += secs + "s";
+        return ret;
     }
 }
