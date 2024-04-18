@@ -64,6 +64,45 @@ public class AdComNum{
         }
     }
     
+    public String toStringNoSpace(){
+        String val = "";
+        if(suffix.length() > 0){
+            val = "" + ((Math.round(value * 100)) / 100.0);
+            String arr[] = val.split("\\."); // Since value is a double, there will always be a decimal point
+            if(Math.abs(Integer.parseInt(arr[1])) < 0.001){
+                    val = arr[0];
+            }
+            if(val.length() > 4){
+                val = val.substring(0, 4);
+            }
+            if(val.indexOf("\\.") == 3){
+                val = val.substring(0, 3);
+            }
+            return val + "" + suffix;
+        } else if(value >= 10000.0){
+            value /= 1000.0;
+            suffix = "K";
+            val = "" + ((Math.round(value * 100)) / 100.0);
+            String arr[] = val.split("\\."); // Since value is a double, there will always be a decimal point
+            if(Math.abs(Integer.parseInt(arr[1])) < 0.001){
+                val = arr[0];
+            }
+            if(val.length() > 4){
+                val = val.substring(0, 4);
+            }
+            if(val.indexOf(".") == 3){
+                val = val.substring(0, 3);
+            }
+            return val + "" + suffix;
+        } else{
+            val = "" + (int)(Math.round(value));
+            if(val.length() > 3){
+                val = val.substring(0, val.length() - 3) + "," + val.substring(val.length() - 3, val.length());
+            }
+            return val;
+        }
+    }
+    
     public double getValue(){
         return value;
     }

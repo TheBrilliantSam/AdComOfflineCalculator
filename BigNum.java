@@ -10,35 +10,30 @@ public class BigNum{
     }
     
     public BigNum(AdComNum value){
-        String input = value.toString();
-        amount = value.getValue();
+        String disp = value.toString();
+        String components[] = disp.split(" ");
         String suffix = "";
-        int indx = 0;
-        for(int i = 0; i < input.length(); i++){
-            char ch = input.charAt(i);
-            if(ch >= 65 && ch <= 90){
-                suffix += "" + ch;
-            } else if(ch >= 97 && ch <= 122){
-                suffix += "" + (char)(ch - 32);
-            }
-        }
-        if(suffix.length() == 0){
+        amount = value.getValue();
+        if(components.length < 2){
             exponent = 0;
-        } else if(suffix.length() == 1){
-            if(suffix.equals("K")){
-                exponent = 3;
-            }
-            if(suffix.equals("M")){
-                exponent = 6;
-            }
-            if(suffix.equals("B")){
-                exponent = 9;
-            }
-            if(suffix.equals("T")){
-                exponent = 12;
-            }
         } else{
-            exponent = ((suffix.length() - 2) * 78) + (((int)(suffix.charAt(0)) - 65) * 3) + 15;
+            suffix = components[1];
+            if(suffix.length() == 1){
+                if(suffix.equals("K")){
+                    exponent = 3;
+                }
+                if(suffix.equals("M")){
+                    exponent = 6;
+                }
+                if(suffix.equals("B")){
+                    exponent = 9;
+                }
+                if(suffix.equals("T")){
+                    exponent = 12;
+                }
+            } else{
+                exponent = ((suffix.length() - 2) * 78) + (((int)(suffix.charAt(0)) - 65) * 3) + 15;
+            }
         }
     
         this.update();

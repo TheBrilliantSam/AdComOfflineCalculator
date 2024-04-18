@@ -2,7 +2,7 @@ import java.util.*;
 
 public class Balance{
     
-    private int length;
+    private Time length;
     private String eventName;
     
     private Generator[][] gens;
@@ -13,21 +13,28 @@ public class Balance{
         eventName = event;
     }
     
-    public void instantiate(int l, Generator[][] g, ArrayList<Researcher> r){
-        length = l;
+    public void instantiate(Time t, Generator[][] g, ArrayList<Researcher> r){
+        length = t;
         gens = g;
         rsch = r;
         System.out.println("Event: " + eventName + "\n");
         String duration;
-        switch(length){
+        int len = length.getHours();
+        switch(len){
             case 32:
                 duration = "Mini";
                 break;
             case 52:
                 duration = "Fusion";
                 break;
+            case 76:
+                duration = "Extended Fusion";
+                break;
             case 100:
                 duration = "Weekend";
+                break;
+            case 148:
+                duration = "Weeklong";
                 break;
             case 268:
                 duration = "Supreme";
@@ -36,7 +43,7 @@ public class Balance{
                 duration = "Unknown";
                 break;
         }
-        System.out.println("Length: " + length + "h (" + duration + ")");
+        System.out.println("Length: " + length.toHourString() + " (" + duration + ")");
         System.out.println("Industries: " + getIndustries() + "\n");
     }
     
@@ -80,7 +87,7 @@ public class Balance{
             printout.add(0, prSt);
             prSt = null;
             BigNum val = new BigNum(amounts[industry - 1][i + 1]);
-            BNandBool thing = gens[industry - 1][i].prodPerSec(rsch, commons[industry - 1][i], val, boost, industry, dur);
+            BNandBool thing = gens[industry - 1][i].production(rsch, commons[industry - 1][i], val, boost, industry, dur);
             BigNum amt = thing.getBN();
             if(i != 0){
                 rand[i - 1] = thing.getBOOL();
@@ -114,9 +121,17 @@ public class Balance{
         for(String s : printout){
             System.out.println(s);
         }
-        System.out.println("\nCommon Cards: " + Arrays.toString(commons[industry - 1]) + "\nProduction Rare Level: " + rsch.get(industry - 1).getLvl() + " (x" + (int)(rsch.get(industry - 1).getBoost()) + " BOOST)");
+        System.out.println("\nCommon Cards: " + Arrays.toString(commons[industry - 1]));
+        BigNum valNum = new BigNum(amounts[industry - 1][1]);
+        gens[industry - 1][0].printDetails(rsch, commons[industry - 1][0], valNum, boost, industry, dur);
         //System.out.println("Luck Chance: " + rsch.get)
         System.out.println("\n----------------------------------------------------\n");
+    }
+    
+    public void calculateAllIndustriesOffline(String[][] amounts, int[][] commons, Time dur, boolean boost){
+        for(int i = 0; i < getIndustries(); i++){
+            calculateOffline(i + 1, amounts, commons, dur, boost);
+        }
     }
     
 }
