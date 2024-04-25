@@ -48,20 +48,26 @@ public class Researcher{
         level = x;
     }
     
-    public double getBoost(){
+    public BigNum getBoost(){
         if(override.length == 0){
             if(upgrade.equals("prod")){
+                BigNum ret = new BigNum(none, 0);
                 if(level > 0){
-                    return initial * (int)(Math.pow(multiplier, level - 1));
-                } else{
-                    return none;
-                }
+                    ret = BigNum.multiply(ret, initial);
+                    for(int i = 1; i < level; i++){
+                        ret = BigNum.multiply(ret, multiplier);
+                    }
+                } 
+                return ret;
             } else if(upgrade.equals("crit")){
+                BigNum ret = new BigNum(none, 0);
                 if(level > 0){
-                    return none * initial * (int)(Math.pow(multiplier, level - 1));
-                } else{
-                    return none;
-                }
+                    ret = BigNum.multiply(ret, initial);
+                    for(int i = 1; i < level; i++){
+                        ret = BigNum.multiply(ret, multiplier);
+                    }
+                } 
+                return ret;
             } else if(upgrade.equals("luck")){ // EXCEPTION: INIT IS ADDED TO EVERY LEVEL, MULT IS BONUS BOOST, SUCH AS IN MINIS
                 if(difference == 0){
                     double bonus = 0;
@@ -69,30 +75,30 @@ public class Researcher{
                         bonus += ((i - 1) * multiplier);
                     }
                     //System.out.println(bonus);
-                    return none + initial * level + bonus;
+                    return new BigNum(none + initial * level + bonus, 0);
                 } else if(difference != 0 && level > 0){
                     double bonus = 0;
                     for(int i = level - 1; i > 1; i--){
                         bonus += ((i - 1) * multiplier);
                     }
                     //System.out.println(bonus);
-                    return none + initial + difference * (level - 1) + bonus;
+                    return new BigNum(none + initial + difference * (level - 1) + bonus, 0);
                 } else{
-                    return none;
+                    return new BigNum(none, 0);
                 }
             } else{
-                return -1;
+                return new BigNum(0, 0);
             }
         } else{
             if(level < override.length){
                 if(upgrade.equals("luck")){
-                    return override[level] + none;
+                    return new BigNum(override[level] + none, 0);
                 } else{
-                    return override[level] * none;
+                    return new BigNum(override[level] * none, 0);
                 }
             } else{
                 System.out.println("ERROR: ONE OR MORE RARE RESEARCHERS ARE ABOVE MAX LEVEL");
-                return -1;
+                return new BigNum(0, 0);
             }
         }
     }

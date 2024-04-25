@@ -165,8 +165,14 @@ public class Time{
             days++;
         }
     }
-    public int getSecs(){
-        return hrs * 3600 + mins * 60 + secs;
+    public BigNum getSecs(){
+        BigNum d = BigNum.multiply(new BigNum(8.64, 4), days);
+        BigNum h = BigNum.multiply(new BigNum(3.6, 3), hrs);
+        BigNum m = BigNum.multiply(new BigNum(6, 1), mins);
+        BigNum ms = BigNum.add(m, new BigNum(secs, 0));
+        BigNum hms = BigNum.add(ms, h);
+        BigNum dhms = BigNum.add(hms, d);
+        return dhms;
     }
     public String toString(){
         if(days == 0){

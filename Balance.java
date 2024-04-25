@@ -21,7 +21,7 @@ public class Balance{
         String duration;
         int len = length.getHours();
         switch(len){
-            case 32:
+            case 28, 32:
                 duration = "Mini";
                 break;
             case 52:
@@ -45,6 +45,7 @@ public class Balance{
         }
         System.out.println("Length: " + length.toHourString() + " (" + duration + ")");
         System.out.println("Industries: " + getIndustries() + "\n");
+        //System.out.println(java.time.LocalDateTime.now() + "——>" + "\n");
     }
     
     public int getIndustries(){
@@ -69,7 +70,7 @@ public class Balance{
         System.out.println("Offline Duration: " + dur.toString() + "\n");
         ArrayList<Researcher> relavantRsch = new ArrayList<Researcher>();
         ArrayList<String> printout = new ArrayList<String>();
-        double secs = dur.getSecs();
+        BigNum secs = dur.getSecs();
         AdComNum fix = new AdComNum(new BigNum(amounts[industry - 1][amounts[industry - 1].length - 1]));
         amounts[industry - 1][amounts[industry - 1].length - 1] = fix.toString();
         boolean rand[] = new boolean[commons[industry - 1].length];
@@ -87,7 +88,7 @@ public class Balance{
             printout.add(0, prSt);
             prSt = null;
             BigNum val = new BigNum(amounts[industry - 1][i + 1]);
-            BNandBool thing = gens[industry - 1][i].production(rsch, commons[industry - 1][i], val, boost, industry, dur);
+            BNandBool thing = gens[industry - 1][i].production(rsch, commons[industry - 1][i], val, boost, industry, secs);
             BigNum amt = thing.getBN();
             if(i != 0){
                 rand[i - 1] = thing.getBOOL();

@@ -27,8 +27,15 @@ public class AgesGenerator extends Generator{
         varB = b;
     }
     
-    public int getSpeedBoost(int l){
-        return varB * (int)(Math.pow(varA, l)) + (int)(Math.pow(l, 2));
+    public BigNum getSpeedBoost(int l){
+        BigNum part1 = new BigNum(1, 0);
+        for(int i = 0; i < l; i++){
+            part1 = BigNum.multiply(part1, varA);
+        }
+        part1 = BigNum.multiply(part1, varB);
+        BigNum part2 = new BigNum(l * l, 0);
+        BigNum ret = BigNum.add(part1, part2);
+        return ret;
     }
     
 }

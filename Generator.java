@@ -1,5 +1,6 @@
 import java.util.*;
 public class Generator{
+    
     private int baseProd;
     private int baseTime;
     private int initCommon;
@@ -11,53 +12,55 @@ public class Generator{
         commonMult = cm;
     }
     
-    public BNandBool production(ArrayList<Researcher> rsch, int commonLvl, BigNum amt, boolean boost, int ind, Time dur){
-        double prodBoost = 1.0;
-        double luckChance = 0.0;
-        double critAmt = 1.0;
-        double result = 0.0;
+    public BNandBool production(ArrayList<Researcher> rsch, int commonLvl, BigNum amt, boolean boost, int ind, BigNum secs){
+        BigNum prodBoost = new BigNum(1, 0);
+        BigNum luckChance = new BigNum(0.0);
+        BigNum critAmt = new BigNum(1, 0);
+        BigNum result = new BigNum(0, 0);
         BigNum ret;
         for(Researcher r : rsch){
             if(r.getUp().equals("prod") && r.thisIndustry(ind)){
-                prodBoost *= r.getBoost();
+                prodBoost = BigNum.multiply(prodBoost, r.getBoost());
                 //System.out.println(prodBoost);
             }
             if(r.getUp().equals("crit") && r.thisIndustry(ind)){
-                critAmt *= r.getBoost();
+                critAmt = BigNum.multiply(critAmt, r.getBoost());
             }
             if(r.getUp().equals("luck") && r.thisIndustry(ind)){
-                luckChance += r.getBoost();
+                luckChance = BigNum.add(luckChance, r.getBoost());
             }
         }
         
         if(boost){
-            prodBoost *= 2;
+            prodBoost = BigNum.multiply(prodBoost, 2);
             //System.out.println(prodBoost);
         }
         
-        int runs = 0;
+        int runs;
         boolean randomized = false;
         //System.out.println(prodBoost + " " + luckChance + " " + critAmt);
-        double time = baseTime;
+        BigNum time = new BigNum(1.0 * baseTime);
         if(commonLvl != 0){
-            time /= getSpeedBoost(commonLvl);
+            //time = BigNum.divide(time, getSpeedBoost(commonLvl));
             //System.out.println(initCommon * (int)(Math.pow(commonMult, commonLvl - 1)));
             //System.out.println(baseTime + " -> " + time);
-            runs = (int)(dur.getSecs() * 1.0 / time);
+            BigNum r = BigNum.multiply(secs, getSpeedBoost(commonLvl));
+            r = BigNum.divide(r, time);
+            runs = r.intVal();
             //System.out.println(runs);
-            if(runs < 500 && (luckChance != 0 && critAmt > 1)){
+            if(!(r.compareTo(500)) && (luckChance.isNotZero() && critAmt.isMoreThanOne())){
                 randomized = true;
                 int crits = 0;
-                result = (baseProd * prodBoost);
+                result = BigNum.multiply(prodBoost, baseProd);
                 for(int i = 0; i < runs; i++){
-                    if(Math.random() < luckChance){
+                    if(Math.random() < luckChance.toDouble()){
                         crits++;
                     }
                 }
-                result = (result * critAmt * crits) + (result * (runs - crits));
+                result = BigNum.add(BigNum.multiply(result, BigNum.multiply(critAmt, crits)), BigNum.multiply(result, runs - crits));
             } else{
-                result = (baseProd * prodBoost) * runs;
-                result *= (luckChance * critAmt) + (1 - luckChance);
+                result = BigNum.multiply(prodBoost, r, baseProd);
+                result = BigNum.multiply(result, BigNum.add( BigNum.multiply(luckChance, critAmt), 1 - luckChance.toDouble() ));
             }
             //System.out.println("Common Boost: " + (initCommon * (Math.pow(commonMult, (commonLvl - 1)))));
             //System.out.println("Time: " + baseTime + " -> " + time);
@@ -73,41 +76,47 @@ public class Generator{
         return new BNandBool(ret, randomized);
     }
     
-    public int getSpeedBoost(int l){
-        return initCommon * (int)(Math.pow(commonMult, l - 1));
+    //Precondition: l > 0
+    public BigNum getSpeedBoost(int l){
+        BigNum ret = new BigNum(initCommon);
+        for(int i = 1; i < l; i++){
+            ret = BigNum.multiply(ret, commonMult);
+        }
+        return ret;
     }
     
     public void printDetails(ArrayList<Researcher> rsch, int commonLvl, BigNum amt, boolean boost, int ind, Time dur){
-        double prodBoost = 1.0;
-        double luckChance = 0.0;
-        double critAmt = 1.0;
-        double result = 0.0;
+        BigNum prodBoost = new BigNum(1, 0);
+        BigNum luckChance = new BigNum(0.0);
+        BigNum critAmt = new BigNum(1, 0);
+        BigNum result = new BigNum(0, 0);
         BigNum ret;
         for(Researcher r : rsch){
             if(r.getUp().equals("prod") && r.thisIndustry(ind)){
-                prodBoost *= r.getBoost();
+                prodBoost = BigNum.multiply(prodBoost, r.getBoost());
                 //System.out.println(prodBoost);
             }
             if(r.getUp().equals("crit") && r.thisIndustry(ind)){
-                critAmt *= r.getBoost();
+                critAmt = BigNum.multiply(critAmt, r.getBoost());
             }
             if(r.getUp().equals("luck") && r.thisIndustry(ind)){
-                luckChance += r.getBoost();
+                luckChance = BigNum.add(luckChance, r.getBoost());
             }
         }
         
         if(boost){
-            prodBoost *= 2;
+            prodBoost = BigNum.multiply(prodBoost, 2);
             //System.out.println(prodBoost);
         }
-        AdComNum p = new AdComNum(new BigNum((int)(prodBoost), 0));
-        AdComNum c = new AdComNum(new BigNum((int)(critAmt), 0));
         
-        String luckiness = Operations.removeDecimals(luckChance * 100);
+        AdComNumShort p = new AdComNumShort(prodBoost);
+        AdComNumShort c = new AdComNumShort(critAmt);
         
-        System.out.println("Production Boost: x" + p.toStringNoSpace());
+        String luckiness = Operations.removeDecimals(luckChance.toDouble() * 100);
+        
+        System.out.println("Production Boost: x" + p);
         System.out.println("Luck Chance: " + luckiness + "%");
-        System.out.println("Crit Bonus: x" + c.toStringNoSpace());
+        System.out.println("Crit Bonus: x" + c);
         //System.out.println("T1 Production Boost: x" + getSpeedBoost(commonLvl));
     }
     

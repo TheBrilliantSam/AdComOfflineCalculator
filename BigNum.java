@@ -39,6 +39,12 @@ public class BigNum{
         this.update();
     }
     
+    public BigNum(double d){
+        amount = d;
+        exponent = 0;
+        this.update();
+    }
+    
     public BigNum(String input){
         String digits = "";
         String suffix = "";
@@ -76,12 +82,53 @@ public class BigNum{
         this.update();
     }
     
+    public boolean isMoreThanOne(){
+        if(exponent > 0){
+            return true;
+        } else if(exponent == 0 && amount > 1){
+            return true;
+        } else{
+            return false;
+        }
+    }
+    
+    public boolean isNotZero(){
+        if(exponent == 0 && amount == 0){
+            return false;
+        } else{
+            return true;
+        }
+    }
+    
+    public boolean compareTo(double d){
+        BigNum input = new BigNum(d);
+        if(exponent > input.getEXP()){
+            return true;
+        } else if(exponent == input.getEXP()){
+            if(amount > input.getX()){
+                return true;
+            } else{
+                return false;
+            }
+        } else{
+            return false;
+        }
+    }
+    
+    public double toDouble(){
+        return amount * Math.pow(10, exponent);
+    }
+    
     public double getX(){
         return amount;
     }
     
     public int getEXP(){
         return exponent;
+    }
+    
+    public int intVal(){
+        return (int)(amount * (Math.pow(10, exponent)));
     }
     
     public void update(){
@@ -109,6 +156,12 @@ public class BigNum{
         return result;
     }
     
+    public static BigNum add(BigNum d1, double x){
+        x *= Math.pow(10, d1.getEXP());
+        BigNum result = new BigNum(d1.getX() + x, d1.getEXP());
+        return result;
+    }
+    
     public static BigNum multiply(BigNum d1, BigNum d2){
         BigNum result = new BigNum(d1.getX() * d2.getX(), d1.getEXP() + d2.getEXP());
         return result;
@@ -124,6 +177,11 @@ public class BigNum{
         return result;
     }
     
+    public static BigNum multiply(BigNum d1, int x, int y){
+        BigNum result = new BigNum(d1.getX() * x * y, d1.getEXP());
+        return result;
+    }
+    
     public static BigNum multiply(BigNum d1, BigNum d2, double x){
         BigNum result = new BigNum(d1.getX() * d2.getX() * x, d1.getEXP() + d2.getEXP());
         return result;
@@ -131,6 +189,11 @@ public class BigNum{
     
     public static BigNum divide(BigNum d1, BigNum d2){
         BigNum result = new BigNum(d1.getX() / d2.getX(), d1.getEXP() - d2.getEXP());
+        return result;
+    }
+    
+    public static BigNum divide(BigNum d1, double x){
+        BigNum result = new BigNum(d1.getX() / x, d1.getEXP());
         return result;
     }
     

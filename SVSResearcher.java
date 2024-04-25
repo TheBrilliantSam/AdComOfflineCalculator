@@ -3,12 +3,20 @@ public class SVSResearcher extends Researcher{
     public SVSResearcher(double none, ArrayList<Integer> ind){
         super("crit", none, -1, -1, ind);
     }
-    public double getBoost(){
+    public BigNum getBoost(){
         int lvl = super.getLvl();
         if(lvl != 0){
-            return ((int)(Math.pow(4, lvl)) + (5 * lvl * lvl)) * super.getNone();
+            BigNum part1 = new BigNum(1.0, 0);
+            for(int i = 0; i < lvl; i++){
+                part1 = BigNum.multiply(part1, 4.0);
+            }
+            BigNum part2 = new BigNum(lvl, 0);
+            part2 = BigNum.multiply(part2, lvl);
+            part2 = BigNum.multiply(part2, super.getNone());
+            part2 = BigNum.multiply(part2, 5.0);
+            return BigNum.add(part1, part2);
         } else{
-            return super.getInit();
+            return new BigNum(super.getNone(), 0);
         }
     }
 }
