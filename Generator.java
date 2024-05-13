@@ -12,7 +12,7 @@ public class Generator{
         commonMult = cm;
     }
     
-    public BNandBool production(ArrayList<Researcher> rsch, int commonLvl, BigNum amt, boolean boost, int ind, BigNum secs){
+    public BNandBool production(ArrayList<Researcher> rsch, int commonLvl, BigNum amt, boolean boost, int ind, BigNum secs, boolean ran){
         BigNum prodBoost = new BigNum(1, 0);
         BigNum luckChance = new BigNum(0.0);
         BigNum critAmt = new BigNum(1, 0);
@@ -48,7 +48,7 @@ public class Generator{
             r = BigNum.divide(r, time);
             runs = r.intVal();
             //System.out.println(runs);
-            if(!(r.compareTo(500)) && (luckChance.isNotZero() && critAmt.isMoreThanOne())){
+            if(ran && !(r.compareTo(500)) && (luckChance.isNotZero() && critAmt.isMoreThanOne())){
                 randomized = true;
                 int crits = 0;
                 result = BigNum.multiply(prodBoost, baseProd);
@@ -76,13 +76,17 @@ public class Generator{
         return new BNandBool(ret, randomized);
     }
     
-    //Precondition: l > 0
+    //Precondition: l ≠ 0
     public BigNum getSpeedBoost(int l){
-        BigNum ret = new BigNum(initCommon);
-        for(int i = 1; i < l; i++){
-            ret = BigNum.multiply(ret, commonMult);
+        if(l > 0){
+            BigNum ret = new BigNum(initCommon);
+            for(int i = 1; i < l; i++){
+                ret = BigNum.multiply(ret, commonMult);
+            }
+            return ret;
+        } else{
+            return new BigNum(1, 0);
         }
-        return ret;
     }
     
     public void printDetails(ArrayList<Researcher> rsch, int commonLvl, BigNum amt, boolean boost, int ind, Time dur){
@@ -115,8 +119,9 @@ public class Generator{
         String luckiness = Operations.removeDecimals(luckChance.toDouble() * 100);
         
         System.out.println("Production Boost: x" + p);
-        System.out.println("Luck Chance: " + luckiness + "%");
-        System.out.println("Crit Bonus: x" + c);
+        if(luckChance.isNotZero() && critAmt.isMoreThanOne()){
+            System.out.println("Crits: " + luckiness + "% chance of x" + c + " bonus");
+        }
         //System.out.println("T1 Production Boost: x" + getSpeedBoost(commonLvl));
     }
     

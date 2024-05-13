@@ -1,43 +1,66 @@
 // Currently supported balances: All AdCom events and All AdAges events!
 
+// Entering amounts is not case sensitive, but please use the dot decimal point (.) for tenths and beyond (parser ignores commas).
+// If you want to calculate all industries at once, enter 0 for the industry.
+// Always make sure the number of generators in amounts ≥ number of generators in commons > 0 (unless the event doesn't have that industry)
+
+import java.util.*;
 public class Offline {
     public static void main(String args[]) {
       
-      Event evt = new Event("SVS");
+      ArrayList<String[]> amounts = new ArrayList<String[]>();
+      ArrayList<int[]> commons = new ArrayList<int[]>();
+      
+      ///////////////////////////
+      ////  USER INPUT AREA  ////
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////
+      /**/  String eventName = "Japan";
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////
+      /**/  amounts.add(new String[] {"", "353GG", "47.6EE", "4.45CC", "705.9T", "208.86M", "3M"});
+      /**/  amounts.add(new String[] {"", "18.65EE", "764BB", "104T", "8.95M"});
+      /**/  amounts.add(new String[] {"", "5.06b", "241k"});
+      /**/  amounts.add(new String[] {""});
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////
+      /**/  commons.add(new int[] {4, 3, 3, 3, 3, 4});
+      /**/  commons.add(new int[] {2, 4, 3, 3});
+      /**/  commons.add(new int[] {-1, -1});
+      /**/  commons.add(new int[] {});
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////
+      /**/  int rareCards[] = {2, 0, 0, 0, 0, 0, 2, 4, 3, 0};
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////
+      /**/  String time = "15m";
+      /**/  int industry = 0;
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////
+      /**/  boolean boost = true;
+      /**/  boolean randomize = true;
+      /**/  boolean resetResource = false;
+      /**/  boolean print = true;
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+      Event evt = new Event(eventName);
       
       if(evt.isValid()){
           
-          // Entering amounts is not case sensitive, but please use the dot decimal point (.) for tenths and beyond (parser ignores commas).
           String vals[][] = new String [evt.getIndustries()][];
+          int commonCards[][] = new int [evt.getIndustries()][];
           
-          // Generator values for first industry, with first value being the resource amount, followed by generators.
-          vals[0] = new String[] {"0", "6.09nn", "6.09nn", "6.09nn", "281jj", "18.38gg", "34.9dd", "26.37aa", "142.58m"};
-          // Generator values for second industry, with first value being the resource amount, followed by generators.
-          vals[1] = new String[] {"0", "8.45ii", "148ee", "29.6bb", "28.3b", "1629"};
-          // Generator values for third industry, with first value being the resource amount, followed by generators.
-          //vals[2] = new String[] {"0", "47.7hh", "109.1dd", "5.48aa", "84.53m"};
+          for(int i = 0; i < vals.length; i++){
+              vals[i] = amounts.get(i);
+              commonCards[i] = commons.get(i);
+          }
           
-          int commons[][] = new int [evt.getIndustries()][];
-          // Common levels for first industry.
-          commons[0] = new int[] {103, 6, 6, 5, 6, 5, 6, 4};
-          // Common levels for second industry.
-          commons[1] = new int[] {6, 6, 6, 6, 4};
-          // Common levels for third industry.
-          //commons[2] = new int[] {6, 7, 6, 4};
+          // public void calculateOffline(int INDUSTRY, String[], int[], Time, boolean BOOST, boolean RANDOMIZE, boolean RESET_RESOURCE, boolean PRINT)
+          // public void calculateAllIndustriesOffline(String[], int[], Time, boolean BOOST, boolean RANDOMIZE, boolean RESET_RESOURCE, boolean PRINT)
           
-          // Rare levels (order: Swann, Hooper, Manta, Moby, Zora, Neptune)
-          int rares[] = {15, 4, 4, 1, 4, 4};
-          evt.setRares(rares);
+          if(industry == 0){
+              evt.calculateAllIndustriesOffline(vals, commonCards, rareCards, new Time (time), boost, randomize, resetResource, print);
+          } else {
+              evt.calculateOffline(industry, vals, commonCards, rareCards, new Time (time), boost, randomize, resetResource, print);
+          }
           
-          /* public void calculateOffline(int INDUSTRY, String[], int[], Time, boolean BOOST)
+          // Add any additional calculations below using the same calculation methods.
           
-          Time duration = new Time("4h");
-          evt.calculateOffline(1, vals, commons, duration, true);
-          evt.calculateOffline(2, vals, commons, duration, true);
-          evt.calculateOffline(3, vals, commons, duration, true); */
-          
-          evt.calculateOffline(1, vals, commons, new Time ("3d"), true);
-      
       }
+
     }
 }
