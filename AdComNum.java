@@ -28,11 +28,14 @@ public class AdComNum{
             case 4:
                 suffix = "T";
                 break;
+            case 41:
+                suffix = "KFC";
+                break;
             default:
                 suffix = "";
                 break;
         }
-        if(ascii > 4){
+        if(suffix.equals("") && ascii > 1){
             ascii -= 5;
             int times = ascii / 26;
             times += 2;

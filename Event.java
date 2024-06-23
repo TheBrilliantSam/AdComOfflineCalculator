@@ -3,7 +3,8 @@ public class Event extends Balance{
     private boolean valid = true;
     public Event(String event){
         super(event);
-        if(event.equals("Atlantis") || event.equals("Winter") || event.equals("Stone")){
+        event = event.toLowerCase();
+        if(event.equals("atlantis") || event.equals("winter") || event.equals("stone")){
             int length = 100;
             Time duration = new Time(length + "h");
             Generator[][] gens;
@@ -36,7 +37,7 @@ public class Event extends Balance{
             rsch.add(new Researcher("com", 1, 6, 2, i2));
             rsch.add(new Researcher("com", 1, 8, 2, i3));
             super.instantiate(duration, gens, rsch);
-        } else if(event.equals("Crusade") || event.equals("Zombie") || event.equals("Ninja")){
+        } else if(event.equals("crusade") || event.equals("zombie") || event.equals("ninja")){
             int length = 100;
             Time duration = new Time(length + "h");
             Generator[][] gens;
@@ -69,7 +70,7 @@ public class Event extends Balance{
             rsch.add(new Researcher("com", 1, 5, 2, i2));
             rsch.add(new Researcher("com", 1, 5, 2, i3));
             super.instantiate(duration, gens, rsch);
-        } else if(event.equals("Space") || event.equals("Cowboy")){
+        } else if(event.equals("space") || event.equals("cowboy")){
             int length = 100;
             Time duration = new Time(length + "h");
             Generator[][] gens;
@@ -107,7 +108,7 @@ public class Event extends Balance{
             rsch.add(new Researcher("com", 1, 9, 2, i3));
             rsch.add(new Researcher("crit", 256, 1, 1, global));
             super.instantiate(duration, gens, rsch);
-        } else if(event.equals("Power") || event.equals("Oil")){
+        } else if(event.equals("power") || event.equals("oil")){
             int length = 32;
             Time duration = new Time(length + "h");
             Generator[][] gens;
@@ -136,7 +137,7 @@ public class Event extends Balance{
             rsch.add(new Researcher("com", 1, 4, 2, global));
             rsch.add(new Researcher("crit", 8, 1, 1, global));
             super.instantiate(duration, gens, rsch);
-        } else if(event.equals("Shield")){
+        } else if(event.equals("shield")){
             int length = 32;
             Time duration = new Time(length + "h");
             Generator[][] gens;
@@ -165,7 +166,7 @@ public class Event extends Balance{
             rsch.add(new Researcher("com", 1, 4, 2, i2));
             rsch.add(new Researcher("crit", 16, 1, 1, global));
             super.instantiate(duration, gens, rsch);
-        } else if(event.equals("Export")){
+        } else if(event.equals("export")){
             int length = 32;
             Time duration = new Time(length + "h");
             Generator[][] gens;
@@ -191,7 +192,7 @@ public class Event extends Balance{
             rsch.add(new Researcher("com", 1, 4, 2, i1));
             rsch.add(new Researcher("com", 1, 4, 2, i2));
             super.instantiate(duration, gens, rsch);
-        } else if(event.equals("Farm") || event.equals("Science") || event.equals("Pet Show") || event.equals("Architecture") || event.equals("Infrastructure")){
+        } else if(event.equals("farm") || event.equals("science") || event.equals("pet show") || event.equals("architecture") || event.equals("infrastructure")){
             int length = 52;
             Time duration = new Time(length + "h");
             Generator[][] gens;
@@ -222,7 +223,7 @@ public class Event extends Balance{
             rsch.add(new Researcher("com", 1, 7, 2, i2));
             rsch.add(new Researcher("crit", 32, 1, 1, global));
             super.instantiate(duration, gens, rsch);
-        } else if(event.equals("SVS") || event.equals("Vehicle Show")){
+        } else if(event.equals("svs") || event.equals("vehicle show")){
             int length = 52;
             Time duration = new Time(length + "h");
             Generator[][] gens;
@@ -252,7 +253,7 @@ public class Event extends Balance{
             rsch.add(new Researcher("com", 1, 8, 4, i1));
             rsch.add(new Researcher("com", 1, 8, 2, i2));
             super.instantiate(duration, gens, rsch);
-        } else if(event.equals("Monster Hunt") || event.equals("Halloween") || event.equals("MMH") || event.equals("Anniversary") || event.equals("Celebration") || event.equals("Christmas") || event.equals("Merry") || event.equals("Santa") || event.equals("Cockatrice") || event.equals("Supreme") || event.equals("MLG") || event.equals("CnC") || event.equals("Vacation") || event.equals("Motherland Games") || event.equals("Supervillain") || event.equals("Spooky") || event.equals("Potato Factory") || event.equals("SUV")){
+        } else if(event.equals("monster hunt") || event.equals("halloween") || event.equals("mmh") || event.equals("anniversary") || event.equals("celebration") || event.equals("christmas") || event.equals("merry") || event.equals("santa") || event.equals("cockatrice") || event.equals("supreme") || event.equals("mlg") || event.equals("cnc") || event.equals("vacation") || event.equals("motherland games") || event.equals("supervillain") || event.equals("spooky") || event.equals("potato factory") || event.equals("suv")){
             int length = 268;
             Time duration = new Time(length + "h");
             Generator[][] gens;
@@ -302,7 +303,7 @@ public class Event extends Balance{
             rsch.add(new Researcher("com", 1, 9, 2, i4));
             rsch.add(new Researcher("com", 1, 2, 2, global));
             super.instantiate(duration, gens, rsch);
-        } else if(event.equals("Egypt") || event.equals("Japan")){
+        } else if(event.equals("egypt") || event.equals("japan")){
             int length = 148;
             Time duration = new Time(length + "h");
             Generator[][] gens;
@@ -311,23 +312,23 @@ public class Event extends Balance{
             gens = new Generator[3][];
             gens[0] = new Generator[7];
                 for(int i = 1; i <= gens[0].length; i++){
-                    gens[0][i - 1] = new AgesGenerator(i, 2 * (int)(Math.pow(3, i - 2)), i, 3);
+                    gens[0][i - 1] = new AgesGenerator(i, 2 * (int)(Math.pow(3, i - 2)), 3, i);
                 }
-                gens[0][0] = new AgesGenerator(2, 2, 1, 3);
-                gens[0][1] = new AgesGenerator(2, 4, 2, 3);
+                gens[0][0] = new AgesGenerator(2, 2, 3, 1);
+                gens[0][1] = new AgesGenerator(2, 4, 3, 2);
             gens[1] = new Generator[6];
-                gens[1][0] = new AgesGenerator(3, 3, 2, 3);
-                gens[1][1] = new AgesGenerator(6, 12, 4, 3);
-                gens[1][2] = new AgesGenerator(8, 32, 6, 3);
-                gens[1][3] = new AgesGenerator(9, 48, 8, 3);
-                gens[1][4] = new AgesGenerator(12, 192, 10, 3);
-                gens[1][5] = new AgesGenerator(15, 768, 12, 3);
+                gens[1][0] = new AgesGenerator(3, 3, 3, 2);
+                gens[1][1] = new AgesGenerator(6, 12, 3, 4);
+                gens[1][2] = new AgesGenerator(8, 32, 3, 6);
+                gens[1][3] = new AgesGenerator(9, 48, 3, 8);
+                gens[1][4] = new AgesGenerator(12, 192, 3, 10);
+                gens[1][5] = new AgesGenerator(15, 768, 3, 12);
             gens[2] = new Generator[5];
                 gens[2][0] = new AgesGenerator(4, 4, 3, 3);
-                gens[2][1] = new AgesGenerator(6, 18, 6, 3);
-                gens[2][0] = new AgesGenerator(9, 24, 9, 3);
-                gens[2][1] = new AgesGenerator(14, 144, 12, 3);
-                gens[2][1] = new AgesGenerator(19, 864, 15, 3);
+                gens[2][1] = new AgesGenerator(6, 18, 3, 6);
+                gens[2][2] = new AgesGenerator(9, 24, 3, 9);
+                gens[2][3] = new AgesGenerator(14, 144, 3, 12);
+                gens[2][4] = new AgesGenerator(19, 864, 3, 15);
             rsch = new ArrayList<Researcher>();
             ArrayList<Integer> i1 = new ArrayList<Integer>();
             i1.add(1);
@@ -350,7 +351,7 @@ public class Event extends Balance{
             rsch.add(new Researcher("com", 1, 10, 4, i2));
             rsch.add(new Researcher("com", 1, 14, 4, i3));
             super.instantiate(duration, gens, rsch);
-        } else if(event.equals("Scandinavia") || event.equals("Scand")){
+        } else if(event.equals("scandinavia") || event.equals("scand")){
             int length = 148;
             Time duration = new Time(length + "h");
             Generator[][] gens;
@@ -392,7 +393,7 @@ public class Event extends Balance{
             rsch.add(new Researcher("com", 1, 12, 4, i3));
             rsch.add(new Researcher("crit", 2, 1, 1, global));
             super.instantiate(duration, gens, rsch);
-        } else if(event.equals("Careers") || event.equals("Innovation")){
+        } else if(event.equals("careers") || event.equals("innovation")){
             int length = 76;
             Time duration = new Time(length + "h");
             Generator[][] gens;
@@ -442,7 +443,7 @@ public class Event extends Balance{
             rsch.add(new Researcher("com", 1, 9, 2, i4));
             rsch.add(new Researcher("crit", 2, 1, 1, global));
             super.instantiate(duration, gens, rsch);
-        } else if(event.equals("Aztec")){
+        } else if(event.equals("aztec")){
             int length = 148;
             Time duration = new Time(length + "h");
             Generator[][] gens;
@@ -487,7 +488,7 @@ public class Event extends Balance{
             rsch.add(new Researcher("com", 1, 9, 2, i3));
             rsch.add(new Researcher("com", 1, 3, 2, global));
             super.instantiate(duration, gens, rsch);
-        } else if(event.equals("Music")){
+        } else if(event.equals("music")){
             int length = 148;
             Time duration = new Time(length + "h");
             Generator[][] gens;

@@ -12,6 +12,11 @@ public class Generator{
         commonMult = cm;
     }
     
+    public Generator(int bp, int bt){
+        baseProd = bp;
+        baseTime = bt;
+    }
+    
     public BNandBool production(ArrayList<Researcher> rsch, int commonLvl, BigNum amt, boolean boost, int ind, BigNum secs, boolean ran){
         BigNum prodBoost = new BigNum(1, 0);
         BigNum luckChance = new BigNum(0.0);
@@ -61,6 +66,7 @@ public class Generator{
             } else{
                 result = BigNum.multiply(prodBoost, r, baseProd);
                 result = BigNum.multiply(result, BigNum.add( BigNum.multiply(luckChance, critAmt), 1 - luckChance.toDouble() ));
+                //System.out.println(BigNum.multiply(luckChance, critAmt) + " + " + (1 - luckChance.toDouble())  + " = " + BigNum.add( BigNum.multiply(luckChance, critAmt), new BigNum(1 - luckChance.toDouble()) ));
             }
             //System.out.println("Common Boost: " + (initCommon * (Math.pow(commonMult, (commonLvl - 1)))));
             //System.out.println("Time: " + baseTime + " -> " + time);
@@ -122,7 +128,7 @@ public class Generator{
         if(luckChance.isNotZero() && critAmt.isMoreThanOne()){
             System.out.println("Crits: " + luckiness + "% chance of x" + c + " bonus");
         }
-        //System.out.println("T1 Production Boost: x" + getSpeedBoost(commonLvl));
+        //System.out.println("T1 Production Boost: x" + new AdComNum(getSpeedBoost(commonLvl)));
     }
     
 }

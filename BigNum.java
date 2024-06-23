@@ -10,7 +10,8 @@ public class BigNum{
     }
     
     public BigNum(AdComNum value){
-        String disp = value.toString();
+        this(value.toString());
+        /*String disp = value.toString();
         String components[] = disp.split(" ");
         String suffix = "";
         amount = value.getValue();
@@ -36,7 +37,7 @@ public class BigNum{
             }
         }
     
-        this.update();
+        this.update();*/
     }
     
     public BigNum(double d){
@@ -79,6 +80,8 @@ public class BigNum{
                 if(suffix.equals("T")){
                     exponent = 12;
                 }
+            } else if(suffix.equals("KFC")){
+                exponent = 123;
             } else{
                 exponent = ((suffix.length() - 2) * 78) + (((int)(suffix.charAt(0)) - 65) * 3) + 15;
             }
@@ -162,9 +165,8 @@ public class BigNum{
     }
     
     public static BigNum add(BigNum d1, double x){
-        x *= Math.pow(10, d1.getEXP());
-        BigNum result = new BigNum(d1.getX() + x, d1.getEXP());
-        return result;
+        BigNum d2 = new BigNum(x);
+        return add(d1, d2);
     }
     
     public static BigNum multiply(BigNum d1, BigNum d2){

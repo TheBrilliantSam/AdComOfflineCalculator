@@ -22,7 +22,7 @@ public class AgesGenerator extends Generator{
     private int varB;
     
     public AgesGenerator(int bp, int bt, int a, int b){
-        super(bp, bt, -1, -1);
+        super(bp, bt);
         varA = a;
         varB = b;
     }
