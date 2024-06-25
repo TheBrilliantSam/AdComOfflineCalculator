@@ -58,6 +58,16 @@ public class Balance{
         //System.out.println(java.time.LocalDateTime.now() + "——>" + "\n");
     }
     
+    public void instantiate(Generator[][] g, ArrayList<Researcher> r){
+        //length = t;
+        gens = g;
+        rsch = r;
+        System.out.println(eventName + "\n");
+        System.out.println("Length: Infinite (or until HH goes bankrupt)");
+        System.out.println("Industries: " + getIndustries() + "\n");
+        //System.out.println(java.time.LocalDateTime.now() + "——>" + "\n");
+    }
+    
     public int getIndustries(){
         return gens.length;
     }
@@ -94,7 +104,10 @@ public class Balance{
                 boolean rand[] = new boolean[commons[industry - 1].length];
                 boolean resRand = false;
                 for(int i = commons[industry - 1].length - 1; i >= 0; i--){
-                    String prSt = "         G" + (i + 1) + ":  ";
+                    String prSt = "         G" + (i + 1) + ": ";
+                    if(i < 9){
+                        prSt += " ";
+                    }
                     prSt += duplicate[i + 1];
                     for(int j = duplicate[i + 1].length(); j < 14; j++){
                         prSt += " ";
@@ -106,7 +119,7 @@ public class Balance{
                     printout.add(0, prSt);
                     prSt = null;
                     BigNum val = new BigNum(amounts[industry - 1][i + 1]);
-                    BNandBool thing = gens[industry - 1][i].production(rsch, commons[industry - 1][i], val, boost, industry, secs, ran);
+                    BNandBool thing = gens[industry - 1][i].production(rsch, commons[industry - 1][i], val, boost, industry, secs, ran, i);
                     BigNum amt = thing.getBN();
                     if(i != 0){
                         rand[i - 1] = thing.getBOOL();
@@ -170,7 +183,7 @@ public class Balance{
                 boolean resRand = false;
                 for(int i = commons[industry - 1].length - 1; i >= 0; i--){
                     BigNum val = new BigNum(amounts[industry - 1][i + 1]);
-                    BNandBool thing = gens[industry - 1][i].production(rsch, commons[industry - 1][i], val, boost, industry, secs, ran);
+                    BNandBool thing = gens[industry - 1][i].production(rsch, commons[industry - 1][i], val, boost, industry, secs, ran, i);
                     BigNum amt = thing.getBN();
                     if(i != 0){
                         rand[i - 1] = thing.getBOOL();

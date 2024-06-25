@@ -11,16 +11,16 @@ public class Offline {
       ///////////////////////////
       ////  USER INPUT AREA  ////
       ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      /**/  String eventName = "Zombie";
+      /**/  String eventName = "Motherland";
       ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       ////  GENERATOR AMOUNTS: enter resource amount followed by generators separated by a slash [/]; insert ampersand [&] between industries
-      /**/  String amounts = "1mm/1kk/1hh/1ee/1bb/1b/1k & 0/5m/500 & 0/1k";
+      /**/  String amounts = "0/1mmmm/1ffff/1zzz/1sss/1lll/1fff/1yy/1ss/1ll/1ff/1t";
       ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       ////  COMMON LEVELS: enter researcher levels in hexadecimal, add a space in between industries
-      /**/  String commons = "666652 6655 531";
+      /**/  String commons = "ccccccbbbbc ccbbbbbbbbc bbbbbbbbbbb cccbbbbbbbb bbbbbbbbbaa";
       ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      ////  RARE CARDS: enter researcher levels in hexadecimal, add whitespaces as you see fit for organization
-      /**/  String rares = "54 3 2 1";
+      ////  RARE CARDS: enter researcher levels in hexadecimal, add whitespaces or symbols as you see fit for organization
+      /**/  String rares = "bbbb babb b9ab babb babb / 78 78 78 88 88 / 55455";
       ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       /**/  String time = "5h30m";
       /**/  int industry = 1;

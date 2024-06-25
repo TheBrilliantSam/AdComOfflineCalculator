@@ -50,7 +50,7 @@ public class Researcher{
     
     public BigNum getBoost(){
         if(override.length == 0){
-            if(upgrade.equals("prod")){
+            if(upgrade.equals("prod") || upgrade.equals("single prod")){
                 BigNum ret = new BigNum(none, 0);
                 if(level > 0){
                     ret = BigNum.multiply(ret, initial);

@@ -4,7 +4,93 @@ public class Event extends Balance{
     public Event(String event){
         super(event);
         event = event.toLowerCase();
-        if(event.equals("atlantis") || event.equals("winter") || event.equals("stone")){
+        if(event.equals("motherland")){
+            Generator[][] gens;
+            ArrayList<Researcher> rsch;
+            //System.out.println("Event: " + event + "\n");
+            gens = new Generator[5][];
+            gens[0] = new Generator[11]; // potato
+            for(int i = 1; i <= gens[0].length; i++){
+                gens[0][i - 1] = new Generator(2 + i, 2 * (int)(Math.pow(2, i - 1)), 2, 2);
+            }
+            gens[1] = new Generator[11]; // land
+            for(int i = 1; i <= gens[1].length; i++){
+                gens[1][i - 1] = new Generator(3 + i, 3 * (int)(Math.pow(2, i - 1)), 2, 2);
+            }
+            gens[2] = new Generator[11]; // ore
+            for(int i = 1; i <= gens[2].length; i++){
+                gens[2][i - 1] = new Generator(4 + i, 4 * (int)(Math.pow(2, i - 1)), 2, 2);
+            }
+            gens[3] = new Generator[11]; // bullet
+            for(int i = 1; i <= gens[3].length; i++){
+                gens[3][i - 1] = new Generator(5 + i, 5 * (int)(Math.pow(2, i - 1)), 2, 2);
+            }
+            gens[4] = new Generator[11]; // placebo
+            for(int i = 1; i <= gens[4].length; i++){
+                gens[4][i - 1] = new Generator(6 + i, 6 * (int)(Math.pow(2, i - 1)), 2, 2);
+            }
+            rsch = new ArrayList<Researcher>();
+            ArrayList<Integer> i1 = new ArrayList<Integer>();
+            i1.add(1);
+            ArrayList<Integer> i2 = new ArrayList<Integer>();
+            i2.add(2);
+            ArrayList<Integer> i3 = new ArrayList<Integer>();
+            i3.add(3);
+            ArrayList<Integer> i4 = new ArrayList<Integer>();
+            i4.add(4);
+            ArrayList<Integer> i5 = new ArrayList<Integer>();
+            i5.add(5);
+            ArrayList<Integer> global = new ArrayList<Integer>();
+            global.add(1);
+            global.add(2);
+            global.add(3);
+            global.add(4);
+            global.add(5);
+            
+            // rares
+            rsch.add(new Researcher("prod", 1, 2, 2, i1));
+            rsch.add(new Researcher("single prod", 1, 9, 2, i1));
+            rsch.add(new Researcher("luck", 0.00, 0.05, 0.0225, 0.005, i1));
+            rsch.add(new Researcher("com", 1, 2, 2, i1));
+            rsch.add(new Researcher("prod", 1, 2, 2, i2));
+            rsch.add(new Researcher("single prod", 1, 9, 2, i2));
+            rsch.add(new Researcher("luck", 0.00, 0.05, 0.0225, 0.005, i2));
+            rsch.add(new Researcher("com", 1, 2, 2, i2));
+            rsch.add(new Researcher("prod", 1, 2, 2, i3));
+            rsch.add(new Researcher("single prod", 1, 9, 2, i3));
+            rsch.add(new Researcher("luck", 0.00, 0.05, 0.0225, 0.005, i3));
+            rsch.add(new Researcher("com", 1, 2, 2, i3));
+            rsch.add(new Researcher("prod", 1, 2, 2, i4));
+            rsch.add(new Researcher("single prod", 1, 9, 2, i4));
+            rsch.add(new Researcher("luck", 0.00, 0.05, 0.0225, 0.005, i4));
+            rsch.add(new Researcher("com", 1, 2, 2, i4));
+            rsch.add(new Researcher("prod", 1, 2, 2, i5));
+            rsch.add(new Researcher("single prod", 1, 9, 2, i5));
+            rsch.add(new Researcher("luck", 0.00, 0.05, 0.0225, 0.005, i5));
+            rsch.add(new Researcher("com", 1, 2, 2, i5));
+            
+            //epics
+            rsch.add(new Researcher("discount", 1, 10, 10, i1));
+            rsch.add(new Researcher("crit", 1, 4, 4, i1));
+            rsch.add(new Researcher("discount", 1, 10, 10, i2));
+            rsch.add(new Researcher("crit", 1, 4, 4, i2));
+            rsch.add(new Researcher("discount", 1, 10, 10, i3));
+            rsch.add(new Researcher("crit", 1, 4, 4, i3));
+            rsch.add(new Researcher("discount", 1, 10, 10, i4));
+            rsch.add(new Researcher("crit", 1, 4, 4, i4));
+            rsch.add(new Researcher("discount", 1, 10, 10, i5));
+            rsch.add(new Researcher("crit", 1, 4, 4, i5));
+            
+            //supremes
+            rsch.add(new Researcher("prod", 1, 2, 2, global));
+            rsch.add(new Researcher("discount", 1, 10, 10, global));
+            rsch.add(new Researcher("luck", 0.01, 0.08, 0.05, 0.01, global));
+            rsch.add(new Researcher("crit", 2, 4, 4, global));
+            rsch.add(new Researcher("com", 1, 2, 2, global));
+            
+            super.instantiate(gens, rsch);
+            
+        } else if(event.equals("atlantis") || event.equals("winter") || event.equals("stone")){
             int length = 100;
             Time duration = new Time(length + "h");
             Generator[][] gens;

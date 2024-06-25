@@ -17,7 +17,7 @@ public class Generator{
         baseTime = bt;
     }
     
-    public BNandBool production(ArrayList<Researcher> rsch, int commonLvl, BigNum amt, boolean boost, int ind, BigNum secs, boolean ran){
+    public BNandBool production(ArrayList<Researcher> rsch, int commonLvl, BigNum amt, boolean boost, int ind, BigNum secs, boolean ran, int gen){
         BigNum prodBoost = new BigNum(1, 0);
         BigNum luckChance = new BigNum(0.0);
         BigNum critAmt = new BigNum(1, 0);
@@ -33,6 +33,9 @@ public class Generator{
             }
             if(r.getUp().equals("luck") && r.thisIndustry(ind)){
                 luckChance = BigNum.add(luckChance, r.getBoost());
+            }
+            if(r.getUp().equals("single prod") && r.thisIndustry(ind) && gen == 0){
+                prodBoost = BigNum.multiply(prodBoost, r.getBoost());
             }
         }
         
