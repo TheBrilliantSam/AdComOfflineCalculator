@@ -64,4 +64,18 @@ public class Operations{
         return finalArr;
     }
     
+    public static int findBestNextGuess(int current, int max, int min, String descriptor){
+        if(descriptor.equals("higher")){
+            if(max == Integer.MAX_VALUE){
+                return current * 2;
+            } else{
+                return (int)Math.round((current + max) / 2.0);
+            }
+        } else if(descriptor.equals("lower")){
+            return (int)Math.round((current + min) / 2.0);
+        } else{
+            return 0;
+        }
+    }
+    
 }

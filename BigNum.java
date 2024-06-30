@@ -11,33 +11,6 @@ public class BigNum{
     
     public BigNum(AdComNum value){
         this(value.toString());
-        /*String disp = value.toString();
-        String components[] = disp.split(" ");
-        String suffix = "";
-        amount = value.getValue();
-        if(components.length < 2){
-            exponent = 0;
-        } else{
-            suffix = components[1];
-            if(suffix.length() == 1){
-                if(suffix.equals("K")){
-                    exponent = 3;
-                }
-                if(suffix.equals("M")){
-                    exponent = 6;
-                }
-                if(suffix.equals("B")){
-                    exponent = 9;
-                }
-                if(suffix.equals("T")){
-                    exponent = 12;
-                }
-            } else{
-                exponent = ((suffix.length() - 2) * 78) + (((int)(suffix.charAt(0)) - 65) * 3) + 15;
-            }
-        }
-    
-        this.update();*/
     }
     
     public BigNum(double d){
@@ -120,6 +93,20 @@ public class BigNum{
             }
         } else{
             return false;
+        }
+    }
+    
+    public int compareTo(BigNum other){
+        if(this.exponent > other.getEXP()){
+            return 1;
+        } else if(this.exponent < other.getEXP()){
+            return -1;
+        } else if(this.amount > other.getX()){
+            return 1;
+        } else if(this.amount < other.getX()){
+            return -1;
+        } else{
+            return 0;
         }
     }
     

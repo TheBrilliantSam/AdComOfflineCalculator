@@ -67,6 +67,12 @@ public class AdComNum{
         }
     }
     
+    public int compareTo(AdComNum other){
+        BigNum thisNum = new BigNum(this.toString());
+        BigNum otherNum = new BigNum(other.toString());
+        return thisNum.compareTo(otherNum);
+    }
+    
     public double getValue(){
         return value;
     }
