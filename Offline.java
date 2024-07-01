@@ -13,10 +13,10 @@ public class Offline {
       /**/  String eventName = "crusade";
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       ////  GENERATOR AMOUNTS: enter RESOURCE AMOUNT followed by generators separated by a slash [/]; insert ampersand [&] between industries
-      /**/  String amounts = "0/60.47jj/2.48hh/173.86ee/11.15cc/2.65aa/1.23b & 0/134.93ff/665.65cc/6.15aa/345.72m/327 & 0/4.02dd/13.38aa/83.21m/117";
+      /**/  String amounts = "0/449.77jj/13.61hh/690.9ee/31.54cc/5.56aa/1.54b & 0/364.55ff/1.72dd/20.85aa/1.58b/1232 & 10.93dd/39.5aa/649.77m/443";
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       ////  COMMON LEVELS: enter researcher levels in hexadecimal, add a space in between industries
-      /**/  String commons = "555655 66654 5664";
+      /**/  String commons = "555656 66665 6665";
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       ////  RARE CARDS: enter researcher levels in hexadecimal, add whitespaces or symbols as you see fit for organization
       /**/  String rares = "444 / 344";
@@ -28,8 +28,8 @@ public class Offline {
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       ////  CALCULATE UNTIL A MISSION COMPLETES
       /**/  boolean missionCalculationEnabled = true;
-      /**/  int targetIndustry = 3;
-      /**/  String targetAmount = "1.8 GG"; // how many of the resource
+      /**/  int targetIndustry = 2;
+      /**/  String targetAmount = "954 II"; // how many of the resource
       /**/  boolean printAllIndustries = true; // target industry is printed by default, but you can choose to print all industries in addition
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       ////  GLOBAL SETTINGS
@@ -49,7 +49,7 @@ public class Offline {
           
           if(timeCalculationEnabled) evt.calculateOffline(industry, amountsArr, commonArr, rareArr, new Time (time), boost, randomize, resetResource, print);
           
-          if(missionCalculationEnabled) evt.calculateOffline(targetAmount, targetIndustry, amountsArr, commonArr, rareArr, boost, randomize, resetResource, print, printAllIndustries);
+          if(missionCalculationEnabled) evt.offlineUntilResource(targetAmount, targetIndustry, amountsArr, commonArr, rareArr, boost, randomize, resetResource, print, printAllIndustries);
           
           /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
           //  CALCULATION METHODS GUIDE
