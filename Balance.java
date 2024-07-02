@@ -79,7 +79,7 @@ public class Balance{
         }
     }
     
-    public void offlineUntilResource(String target, int industry, String[][] amounts, int[][] commons, int[] rares, boolean boost, boolean ran, boolean reset, boolean print, boolean printAllIndustries){
+    public void offlineUntilResource(String target, int industry, String[][] amounts, int[][] commons, int[] rares, boolean boost, boolean reset, boolean print, boolean printAllIndustries){
         setRares(rares);
         if(reset){
                 amounts[industry - 1][0] = "";
@@ -98,7 +98,7 @@ public class Balance{
         boolean complete = false;
         if(debug) System.out.println("Attempts to Calculate:\n");
         while(!complete){
-            AdComNum result = calculate(industry, amountsDup, commons[industry - 1], rares, new Time(seconds + "s"), boost, ran, true, print);
+            AdComNum result = calculate(industry, amountsDup, commons[industry - 1], rares, new Time(seconds + "s"), boost, false, true, print);
             //AdComNum result = calculateOffline(industry, String[][] amounts, commons, rares, new Time(seconds + "s"), boost, ran, reset, print);
             if(debug) System.out.print("resource generated: " + result + ", time: " + new Time(seconds + "s").toString() + ", compare: " + mission.compareTo(result) + ", ");
             System.arraycopy(amountsDupBackup, 0, amountsDup, 0, amountsDup.length);
@@ -134,7 +134,7 @@ public class Balance{
             if(printAllIndustries){
                 industry = 0;
             }
-            calculateOffline(industry, amounts, commons, rares, new Time(seconds + 1 + "s"), boost, ran, reset, print);
+            calculateOffline(industry, amounts, commons, rares, new Time(seconds + 1 + "s"), boost, false, reset, print);
         }
     }
     

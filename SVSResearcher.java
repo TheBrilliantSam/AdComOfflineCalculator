@@ -4,6 +4,7 @@ public class SVSResearcher extends Researcher{
         super("crit", none, -1, -1, ind);
     }
     public BigNum getBoost(){
+        // 4^n + 5(n^2)
         int lvl = super.getLvl();
         if(lvl != 0){
             BigNum part1 = new BigNum(1.0, 0);
@@ -12,9 +13,8 @@ public class SVSResearcher extends Researcher{
             }
             BigNum part2 = new BigNum(lvl, 0);
             part2 = BigNum.multiply(part2, lvl);
-            part2 = BigNum.multiply(part2, super.getNone());
             part2 = BigNum.multiply(part2, 5.0);
-            return BigNum.add(part1, part2);
+            return BigNum.multiply(BigNum.add(part1, part2), super.getNone());
         } else{
             return new BigNum(super.getNone(), 0);
         }
