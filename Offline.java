@@ -1,7 +1,8 @@
 // Currently supported balances: All AdCom events and All AdAges events!
 
 // Entering amounts is not case sensitive, but please use the dot decimal point (.) for tenths and beyond (parser ignores commas).
-// Always make sure the number of generators in amounts ≥ number of generators in commons > 0 before attempting a calculation
+// If you don't enter a placeholder value for a generator at the end of an industry, the program will ignore it.
+// An empty string in amounts is interpreted as 0.
 
 import java.util.*;
 public class Offline {
@@ -10,27 +11,27 @@ public class Offline {
       ///////////////////////////
       ////  USER INPUT AREA  ////
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      /**/  String eventName = "svs";
+      /**/  String eventName = "Motherland Games";
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       ////  GENERATOR AMOUNTS: enter RESOURCE AMOUNT followed by generators separated by a slash [/]; insert ampersand [&] between industries
-      /**/  String amounts = "0/1.19pp/31.26ll/4.6ii/1.51ff/1.6cc/6.61t/137786 & 0/2.49rr/48.5nn/2.68kk/210.6gg/20.62dd/61.61aa/335190/2863";
+      /**/  String amounts = "2.91uu/4.08qq/3.76mm/13.43ii/80.17ee/937aa/51.72m & 155.5nn/55jj/4.26ff/1.43bb/330.61m & 0/145ee/418aa/12.76m & 17.13aa/13.13m";
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       ////  COMMON LEVELS: enter researcher levels in hexadecimal, add a space in between industries
-      /**/  String commons = "5433332 4444421";
+      /**/  String commons = "665554 6652 553 2";
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       ////  RARE CARDS: enter researcher levels in hexadecimal, add whitespaces or symbols as you see fit for organization
-      /**/  String rares = "2232 / 32";
+      /**/  String rares = "4420 330 / 3430 0";
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       ////  CALCULATE FOR A DURATION OF TIME
       /**/  boolean timeCalculationEnabled = false;
-      /**/  String time = "3h45m12s";
-      /**/  int industry = 0; // enter 0 for all industries
-      /**/  boolean randomize = true;
+      /**/  String time = "1d";
+      /**/  int industry = 3; // enter 0 for all industries
+      /**/  boolean randomize = true; // randomize crits for generators with under 500 runs, denoted by asterisk [*]
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       ////  CALCULATE UNTIL A MISSION COMPLETES
-      /**/  boolean missionCalculationEnabled = true;
+      /**/  boolean missionCalculationEnabled = !timeCalculationEnabled;
       /**/  int targetIndustry = 1;
-      /**/  String targetAmount = "100 TT"; // how many of the resource
+      /**/  String targetAmount = "150ww"; // how many of the resource
       /**/  boolean printAllIndustries = true; // target industry is printed by default, but you can choose to print all industries in addition
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       ////  GLOBAL SETTINGS
@@ -47,7 +48,7 @@ public class Offline {
           int[][] commonArr = Operations.parseCommons(commons);
           int[] rareArr = Operations.parseRares(rares);
           
-          if(timeCalculationEnabled) evt.calculateOffline(industry, amountsArr, commonArr, rareArr, new Time (time), boost, randomize, resetResource, print);
+          if(timeCalculationEnabled) evt.calculateOffline(industry, amountsArr, commonArr, rareArr, new Time (time).getSecs(), boost, randomize, resetResource, print);
           
           if(missionCalculationEnabled) evt.offlineUntilResource(targetAmount, targetIndustry, amountsArr, commonArr, rareArr, boost, resetResource, print, printAllIndustries);
           
@@ -59,8 +60,6 @@ public class Offline {
           /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
           
           // Add any additional calculations below.
-          
-          
           
           
      

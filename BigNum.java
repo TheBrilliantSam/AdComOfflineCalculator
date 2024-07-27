@@ -127,18 +127,22 @@ public class BigNum{
     }
     
     public void update(){
-        if(amount != 0){
+        if(Math.abs(amount) != 0){
             while(amount >= 10.0){
                 amount /= 10;
                 exponent++;
             }
-            while(amount < 1.0){
+            while(Math.abs(amount) < 1.0){
                 amount *= 10;
                 exponent--;
             }
         } else{
             exponent = 0;
         }
+    }
+    
+    public static BigNum abs(BigNum d1){
+        return new BigNum(Math.abs(d1.getX()), d1.getEXP());
     }
     
     public static BigNum add(BigNum d1, BigNum d2){
@@ -154,6 +158,21 @@ public class BigNum{
     public static BigNum add(BigNum d1, double x){
         BigNum d2 = new BigNum(x);
         return add(d1, d2);
+    }
+    
+    public static BigNum subtract(BigNum d1, BigNum d2){
+        int lowerExp = Math.min(d1.getEXP(), d2.getEXP());
+        double v1 = d1.getX();
+        v1 *= Math.pow(10, d1.getEXP() - lowerExp);
+        double v2 = d2.getX();
+        v2 *= Math.pow(10, d2.getEXP() - lowerExp);
+        BigNum result = new BigNum(v1 - v2, lowerExp);
+        return result;
+    }
+    
+    public static BigNum subtract(BigNum d1, double x){
+        BigNum d2 = new BigNum(x);
+        return subtract(d1, d2);
     }
     
     public static BigNum multiply(BigNum d1, BigNum d2){
@@ -199,5 +218,12 @@ public class BigNum{
         res+=exponent;
         return res;
     }
+    
+    /*public static BigNum round(BigNum d1, int decimals){
+        String format = "#.";
+        for(int i = 0; i < decimals; i++){
+            format += "#";
+        }
+    }*/
     
 }

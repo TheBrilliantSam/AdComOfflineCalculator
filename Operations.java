@@ -28,14 +28,14 @@ public class Operations{
     }
     
     public static int[][] parseCommons(String s){
-        String[] arr = s.split("\\s+");
-        while(arr[0] == ""){
+        String[] arr = s.split(" ");
+        /*while(arr[0] == ""){
             String[] newArr = new String[arr.length - 1];
             for(int i = 1; i < arr.length; i++){
                 newArr[i - 1] = arr[i];
             }
             arr = newArr;
-        }
+        }*/
         int[][] finalArr = new int[arr.length][];
         for(int ind = 0; ind < arr.length; ind++){
             finalArr[ind] = new int[arr[ind].length()];
@@ -64,7 +64,7 @@ public class Operations{
         return finalArr;
     }
     
-    public static int findBestNextGuess(int current, int max, int min, String descriptor){
+    /*public static int findBestNextGuess(int current, int max, int min, String descriptor){
         if(descriptor.equals("higher")){
             if(max == Integer.MAX_VALUE){
                 return current * 2;
@@ -75,6 +75,20 @@ public class Operations{
             return (int)Math.round((current + min) / 2.0);
         } else{
             return 0;
+        }
+    }*/
+    
+    public static BigNum findBestNextGuess(BigNum current, BigNum max, BigNum min, String descriptor){
+        if(descriptor.equals("higher")){
+            if(max.compareTo(new BigNum(9.99, 2147483647)) == 0){
+                return BigNum.multiply(current, 2);
+            } else{
+                return BigNum.divide((BigNum.add(current, max)), 2);
+            }
+        } else if(descriptor.equals("lower")){
+            return BigNum.divide((BigNum.add(current, min)), 2);
+        } else{
+            return new BigNum(0);
         }
     }
     
