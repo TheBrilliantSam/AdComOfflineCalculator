@@ -7,6 +7,7 @@ public class Balance{
     private boolean debug = false;
     private boolean parseDebug = false;
     private int threshold = 50;
+    private boolean useSpeedBoostsInstead = false;
     
     private Generator[][] gens;
     
@@ -76,12 +77,12 @@ public class Balance{
     }
     
     public void setRares(int[] lvls){
-        for(int i = 0; i < lvls.length; i++){
+        for(int i = 0; i < Math.min(lvls.length, rsch.size()); i++){
             rsch.get(i).setLvl(lvls[i]);
         }
     }
     
-    public void offlineUntilResource(String target, int industry, String[][] amounts, int[][] commons, int[] rares, boolean boost, boolean reset, boolean print, boolean printAllIndustries){
+    public void offlineUntilResource(String target, int industry, String[][] amounts, int[][] commons, int[] rares, boolean boost, boolean reset, boolean print, boolean printAllIndustries, boolean emoji){
         setRares(rares);
         if(reset){
                 amounts[industry - 1][0] = "";
@@ -151,9 +152,9 @@ public class Balance{
                 seconds = BigNum.add(seconds, new BigNum(1));
             }
             if(seconds.getEXP() > 8){
-                calculateOffline(industry, amounts, commons, rares, seconds, boost, false, reset, print);
+                calculateOffline(industry, amounts, commons, rares, seconds, boost, false, reset, print, emoji);
             } else{
-                calculateOffline(industry, amounts, commons, rares, seconds, boost, false, reset, print);
+                calculateOffline(industry, amounts, commons, rares, seconds, boost, false, reset, print, emoji);
             }
         }
     }
@@ -181,7 +182,7 @@ public class Balance{
             amounts[amounts.length - 1] = fix.toString();
             boolean rand[] = new boolean[commons.length];
             boolean resRand = false;
-            for(int i = Math.min(commons.length - 1, amounts.length - 2); i >= 0; i--){
+            for(int i = Math.min(Math.min(commons.length - 1, amounts.length - 2), gens[industry - 1].length - 1); i >= 0; i--){
                 BigNum val = new BigNum(amounts[i + 1]);
                 BNandBool thing = gens[industry - 1][i].production(rsch, commons[i], val, boost, industry, secs, ran, i);
                 BigNum amt = thing.getBN();
@@ -200,7 +201,7 @@ public class Balance{
         }
     }
     
-    public void calculateOffline(int industry, String[][] amounts, int[][] commons, int[] rares, BigNum secs, boolean boost, boolean ran, boolean reset, boolean print){
+    public void calculateOffline(int industry, String[][] amounts, int[][] commons, int[] rares, BigNum secs, boolean boost, boolean ran, boolean reset, boolean print, boolean emoji){
         Time dur = new Time(0);
         if(secs.getEXP() > 8){
             dur = new Time(secs);
@@ -209,7 +210,7 @@ public class Balance{
         }
         boolean valid = true;
         if(industry == 0){
-            calculateAllIndustriesOffline(amounts, commons, rares, secs, boost, ran, reset, print);
+            calculateAllIndustriesOffline(amounts, commons, rares, secs, boost, ran, reset, print, emoji);
         }else{
             setRares(rares);
             if(reset){
@@ -218,7 +219,7 @@ public class Balance{
             }
             if(print){
                 System.out.println("Calculating for Industry " + industry + ".");
-                System.out.println("Offline Duration: " + dur.toString() + "\n");
+                System.out.println("Offline Duration: " + dur.toString());
                 if(amounts[industry - 1].length == 1){
                     System.out.println("ERROR: No generator amounts entered.");
                     valid = false;
@@ -227,7 +228,18 @@ public class Balance{
                     System.out.println("ERROR: Insufficient common cards assigned to generators.");
                     valid = false;
                 }
+                String warnings = "";
+                if(Math.min(commons[industry - 1].length - 1, amounts[industry - 1].length - 2) > gens[industry - 1].length - 1){
+                    warnings += "WARNING: Excess generators have been ignored.\n";
+                }
+                if(rares.length > rsch.size()){
+                    warnings += "WARNING: Excess rare researchers have been ignored.\n";
+                }
+                if(warnings.length() > 0){
+                    System.out.print("\n" + warnings);
+                }
                 if(valid){
+                    System.out.println();
                     String[] duplicate = new String[amounts[industry - 1].length];
                     System.arraycopy(amounts[industry - 1], 0, duplicate, 0, amounts[industry - 1].length);
                     for(int k = 0; k < duplicate.length; k++){
@@ -238,11 +250,11 @@ public class Balance{
                     ArrayList<Researcher> relavantRsch = new ArrayList<Researcher>();
                     ArrayList<String> printout = new ArrayList<String>();
                     //BigNum secs = dur.getSecs();
-                    AdComNum fix = new AdComNum(new BigNum(amounts[industry - 1][amounts[industry - 1].length - 1]));
-                    amounts[industry - 1][amounts[industry - 1].length - 1] = fix.toString();
+                    AdComNum fix = new AdComNum(new BigNum(amounts[industry - 1][Math.min(amounts[industry - 1].length - 1, gens[industry - 1].length)]));
+                    amounts[industry - 1][Math.min(amounts[industry - 1].length - 1, gens[industry - 1].length)] = fix.toString();
                     boolean rand[] = new boolean[commons[industry - 1].length];
                     boolean resRand = false;
-                    for(int i = Math.min(commons[industry - 1].length - 1, amounts[industry - 1].length - 2); i >= 0; i--){
+                    for(int i = Math.min(Math.min(commons[industry - 1].length - 1, amounts[industry - 1].length - 2), gens[industry - 1].length - 1); i >= 0; i--){
                         String prSt = "         G" + (i + 1) + ": ";
                         if(i < 9){
                             prSt += " ";
@@ -292,7 +304,28 @@ public class Balance{
                     for(String s : printout){
                         System.out.println(s);
                     }
-                    System.out.println("\nCommon Cards: " + Arrays.toString(commons[industry - 1]));
+                    if(emoji){
+                        System.out.print("\n⏱️ ");
+                        for(int i = 0; i <= Math.min(Math.min(commons[industry - 1].length - 1, amounts[industry - 1].length - 2), gens[industry - 1].length - 1); i++){
+                            System.out.print(Integer.toHexString(commons[industry - 1][i]).toUpperCase());
+                        }
+                    }
+                    if(!emoji && !useSpeedBoostsInstead) System.out.println("\nCommon Cards: " + Arrays.toString(commons[industry - 1]));
+                    if(!emoji && useSpeedBoostsInstead){
+                        System.out.print("\nCommon Cards: [");
+                        for(int i = 0; i <= Math.min(Math.min(commons[industry - 1].length - 1, amounts[industry - 1].length - 2), gens[industry - 1].length - 1); i++){
+                            BigNum speedBoost = gens[industry - 1][i].getSpeedBoost(commons[industry - 1][i]);
+                            if(speedBoost.compareTo(new BigNum(2147483647)) == -1){
+                                System.out.print(speedBoost.toInteger());
+                                //System.out.print("A");
+                            } else{
+                                System.out.print(speedBoost.roundX(2) + "E+" + speedBoost.getEXP());
+                                //System.out.print("B");
+                            }
+                            if(i != Math.min(Math.min(commons[industry - 1].length - 1, amounts[industry - 1].length - 2), gens[industry - 1].length - 1)) System.out.print(", ");
+                        }
+                        System.out.println("]");
+                    }
                     /*
                     System.out.print("\nCommon Cards: [");
                     for(int i = 0; i < commons[industry - 1].length; i++){
@@ -304,7 +337,8 @@ public class Balance{
                     System.out.println("]");
                     */
                     BigNum valNum = new BigNum(amounts[industry - 1][1]);
-                    gens[industry - 1][0].printDetails(rsch, commons[industry - 1][0], valNum, boost, industry, dur);
+                    gens[industry - 1][0].printDetails(rsch, commons[industry - 1][0], valNum, boost, industry, dur, emoji);
+                    System.out.println();
                     //System.out.println("Luck Chance: " + rsch.get)
                 }
                 System.out.println("\n----------------------------------------------------\n");
@@ -347,9 +381,27 @@ public class Balance{
         }
     }
     
-    public void calculateAllIndustriesOffline(String[][] amounts, int[][] commons, int[] rares, BigNum secs, boolean boost, boolean ran, boolean reset, boolean print){
-        for(int i = 0; i < getIndustries(); i++){
-            calculateOffline(i + 1, amounts, commons, rares, secs, boost, ran, reset, print);
+    public void calculateOffline(int industry, String[][] amounts, int[][] commons, int[] rares, String times, boolean boost, boolean ran, boolean reset, boolean print, boolean emoji){
+        Time[] timeList = Operations.parseTimes(times);
+        for(Time t : timeList){
+            calculateOffline(industry, amounts, commons, rares, t.getSecs(), boost, ran, reset, print, emoji);
+        }
+    }
+    
+    public void calculateAllIndustriesOffline(String[][] amounts, int[][] commons, int[] rares, BigNum secs, boolean boost, boolean ran, boolean reset, boolean print, boolean emoji){
+        for(int i = 0; i < amounts.length; i++){
+            if(i + 1 > getIndustries()){
+                System.out.println("ERROR: No such Industry " + (i + 1) + " exists for this event.\n\n----------------------------------------------------\n");
+            } else{
+                calculateOffline(i + 1, amounts, commons, rares, secs, boost, ran, reset, print, emoji);
+            }
+        }
+    }
+    
+    public void printRareDetails(){
+        System.out.println("Rare Researchers Guide\n");
+        for(int i = 0; i < rsch.size(); i++){
+            System.out.println(rsch.get(i).toString(i + 1) + "\n");
         }
     }
     

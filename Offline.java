@@ -11,33 +11,37 @@ public class Offline {
       ///////////////////////////
       ////  USER INPUT AREA  ////
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      /**/  String eventName = "Motherland Games";
+      /**/  String eventName = "scandinavia";
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       ////  GENERATOR AMOUNTS: enter RESOURCE AMOUNT followed by generators separated by a slash [/]; insert ampersand [&] between industries
-      /**/  String amounts = "2.91uu/4.08qq/3.76mm/13.43ii/80.17ee/937aa/51.72m & 155.5nn/55jj/4.26ff/1.43bb/330.61m & 0/145ee/418aa/12.76m & 17.13aa/13.13m";
+      /**/  String amounts = "56.3nn/8.33kk/1.71hh/523.7dd/732.5aa/2.5b/6 & 289.4kk/5.67hh/1.58ee/316.4aa/406.46m & 0/3.75ee/25.5aa/101.1m";
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       ////  COMMON LEVELS: enter researcher levels in hexadecimal, add a space in between industries
-      /**/  String commons = "665554 6652 553 2";
+      /**/  String commons = "555440 5454 563";
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       ////  RARE CARDS: enter researcher levels in hexadecimal, add whitespaces or symbols as you see fit for organization
-      /**/  String rares = "4420 330 / 3430 0";
+      /**/  String rares = "323 324 313 3";
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       ////  CALCULATE FOR A DURATION OF TIME
       /**/  boolean timeCalculationEnabled = false;
-      /**/  String time = "1d";
-      /**/  int industry = 3; // enter 0 for all industries
+      /**/  String time = "1h20m45s"; // separate consecutive times with semicolon [;]
+      /**/  int industry = 1; // enter 0 for all industries
       /**/  boolean randomize = true; // randomize crits for generators with under 500 runs, denoted by asterisk [*]
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       ////  CALCULATE UNTIL A MISSION COMPLETES
       /**/  boolean missionCalculationEnabled = !timeCalculationEnabled;
       /**/  int targetIndustry = 1;
-      /**/  String targetAmount = "150ww"; // how many of the resource
+      /**/  String targetAmount = "330nn"; // how many of the resource
       /**/  boolean printAllIndustries = true; // target industry is printed by default, but you can choose to print all industries in addition
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       ////  GLOBAL SETTINGS
       /**/  boolean boost = true;
       /**/  boolean resetResource = false;
       /**/  boolean print = true;
+      /**/  boolean emoji = true;
+      /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      ////  RARE RESEARCHERS HELP (this will disable any calculations)
+      /**/  boolean help = false;
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
       Event evt = new Event(eventName);
@@ -48,9 +52,11 @@ public class Offline {
           int[][] commonArr = Operations.parseCommons(commons);
           int[] rareArr = Operations.parseRares(rares);
           
-          if(timeCalculationEnabled) evt.calculateOffline(industry, amountsArr, commonArr, rareArr, new Time (time).getSecs(), boost, randomize, resetResource, print);
+          if(help) evt.printRareDetails();
           
-          if(missionCalculationEnabled) evt.offlineUntilResource(targetAmount, targetIndustry, amountsArr, commonArr, rareArr, boost, resetResource, print, printAllIndustries);
+          if(timeCalculationEnabled && !help) evt.calculateOffline(industry, amountsArr, commonArr, rareArr, time, boost, randomize, resetResource, print, emoji);
+          
+          if(missionCalculationEnabled && !help) evt.offlineUntilResource(targetAmount, targetIndustry, amountsArr, commonArr, rareArr, boost, resetResource, print, printAllIndustries, emoji);
           
           /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
           //  CALCULATION METHODS GUIDE
@@ -60,7 +66,6 @@ public class Offline {
           /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
           
           // Add any additional calculations below.
-          
           
      
       }

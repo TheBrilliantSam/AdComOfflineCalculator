@@ -98,7 +98,7 @@ public class Generator{
         }
     }
     
-    public void printDetails(ArrayList<Researcher> rsch, int commonLvl, BigNum amt, boolean boost, int ind, Time dur){
+    public void printDetails(ArrayList<Researcher> rsch, int commonLvl, BigNum amt, boolean boost, int ind, Time dur, boolean emoji){
         BigNum prodBoost = new BigNum(1, 0);
         BigNum luckChance = new BigNum(0.0);
         BigNum critAmt = new BigNum(1, 0);
@@ -127,9 +127,16 @@ public class Generator{
         
         String luckiness = Operations.removeDecimals(luckChance.toDouble() * 100);
         
-        System.out.println("Production Boost: x" + p);
+        if(emoji) System.out.print("  ✦  ");
+        if(emoji) System.out.print("🔨 x" + p);
+        if(!emoji) System.out.println("Production Boost: x" + p);
+        
         if(luckChance.isNotZero() && critAmt.isMoreThanOne()){
-            System.out.println("Crits: " + luckiness + "% chance of x" + c + " bonus");
+            if(emoji) System.out.print("  ✦  ");
+            if(emoji) System.out.print("🍀 " + luckiness + "%");
+            if(emoji) System.out.print("  ✦  ");
+            if(emoji) System.out.print("💪 x" + c);
+            if(!emoji) System.out.print("Crits: " + luckiness + "% chance of x" + c + " bonus");
         }
         //System.out.println("T1 Production Boost: x" + new AdComNum(getSpeedBoost(commonLvl)));
     }

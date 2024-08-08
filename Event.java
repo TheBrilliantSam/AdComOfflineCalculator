@@ -117,10 +117,10 @@ public class Event extends Balance{
             ArrayList<Integer> i3 = new ArrayList<Integer>();
             i3.add(3);
             rsch.add(new Researcher("prod", 1, 3, 3, i1));
-            rsch.add(new Researcher("prod", 1, 3, 3, i2));
-            rsch.add(new Researcher("prod", 1, 3, 3, i3));
             rsch.add(new Researcher("com", 1, 4, 2, i1));
+            rsch.add(new Researcher("prod", 1, 3, 3, i2));
             rsch.add(new Researcher("com", 1, 6, 2, i2));
+            rsch.add(new Researcher("prod", 1, 3, 3, i3));
             rsch.add(new Researcher("com", 1, 8, 2, i3));
             super.instantiate(duration, gens, rsch);
         } else if(event.equals("crusade") || event.equals("zombie") || event.equals("ninja")){
@@ -150,13 +150,13 @@ public class Event extends Balance{
             ArrayList<Integer> i3 = new ArrayList<Integer>();
             i3.add(3);
             rsch.add(new Researcher("prod", 1, 4, 2, i1));
-            rsch.add(new Researcher("prod", 1, 6, 2, i2));
-            rsch.add(new Researcher("prod", 1, 8, 2, i3));
             rsch.add(new Researcher("com", 1, 5, 2, i1));
+            rsch.add(new Researcher("prod", 1, 6, 2, i2));
             rsch.add(new Researcher("com", 1, 5, 2, i2));
+            rsch.add(new Researcher("prod", 1, 8, 2, i3));
             rsch.add(new Researcher("com", 1, 5, 2, i3));
             super.instantiate(duration, gens, rsch);
-        } else if(event.equals("space") || event.equals("cowboy")){
+        } else if(event.equals("space") || event.equals("cowboy")){ //updated
             int length = 100;
             Time duration = new Time(length + "h");
             Generator[][] gens;
@@ -186,15 +186,15 @@ public class Event extends Balance{
             global.add(1);
             global.add(2);
             global.add(3);
-            rsch.add(new Researcher("prod", 1, 2, 4, global));
-            rsch.add(new Researcher("luck", 0.00, 0.15, 0.00, global));
-            rsch.add(new Researcher("com", 1, 3, 2, global));
             rsch.add(new Researcher("com", 1, 5, 2, i1));
             rsch.add(new Researcher("com", 1, 7, 2, i2));
             rsch.add(new Researcher("com", 1, 9, 2, i3));
-            rsch.add(new Researcher("crit", 256, 1, 1, global));
+            rsch.add(new Researcher("prod", 1, 2, 4, global));
+            rsch.add(new Researcher("luck", 0.00, 0.15, 0.00, global));
+            rsch.add(new Researcher("com", 1, 3, 2, global));
+            rsch.add(new Researcher("crit", 256, 1, 1, global, true));
             super.instantiate(duration, gens, rsch);
-        } else if(event.equals("power") || event.equals("oil")){
+        } else if(event.equals("power") || event.equals("oil")){ //updated
             int length = 32;
             Time duration = new Time(length + "h");
             Generator[][] gens;
@@ -217,13 +217,13 @@ public class Event extends Balance{
             ArrayList<Integer> global = new ArrayList<Integer>();
             global.add(1);
             global.add(2);
+            rsch.add(new Researcher("com", 1, 3, 3, i1));
             rsch.add(new Researcher("prod", 1, 3, 3, i2));
             rsch.add(new Researcher("luck", 0.00, 0.13, 0.02, global));
-            rsch.add(new Researcher("com", 1, 3, 3, i1));
             rsch.add(new Researcher("com", 1, 4, 2, global));
-            rsch.add(new Researcher("crit", 8, 1, 1, global));
+            rsch.add(new Researcher("crit", 8, 1, 1, global, true));
             super.instantiate(duration, gens, rsch);
-        } else if(event.equals("shield")){
+        } else if(event.equals("shield")){ //updated
             int length = 32;
             Time duration = new Time(length + "h");
             Generator[][] gens;
@@ -247,12 +247,12 @@ public class Event extends Balance{
             global.add(1);
             global.add(2);
             rsch.add(new Researcher("prod", 1, 5, 2, i1));
-            rsch.add(new Researcher("luck", 0.00, 0.13, 0.02, i2));
             rsch.add(new Researcher("com", 1, 4, 2, i1));
+            rsch.add(new Researcher("luck", 0.00, 0.13, 0.02, i2));
             rsch.add(new Researcher("com", 1, 4, 2, i2));
-            rsch.add(new Researcher("crit", 16, 1, 1, global));
+            rsch.add(new Researcher("crit", 16, 1, 1, global, true));
             super.instantiate(duration, gens, rsch);
-        } else if(event.equals("export")){
+        } else if(event.equals("export")){ //updated
             int length = 32;
             Time duration = new Time(length + "h");
             Generator[][] gens;
@@ -273,12 +273,16 @@ public class Event extends Balance{
             i1.add(1);
             ArrayList<Integer> i2 = new ArrayList<Integer>();
             i2.add(2);
+            ArrayList<Integer> global = new ArrayList<Integer>();
+            global.add(1);
+            global.add(2);
             rsch.add(new Researcher("prod", 1, 5, 2, i1));
-            rsch.add(new Researcher("prod", 1, 5, 2, i2));
             rsch.add(new Researcher("com", 1, 4, 2, i1));
+            rsch.add(new Researcher("prod", 1, 5, 2, i2));
             rsch.add(new Researcher("com", 1, 4, 2, i2));
+            rsch.add(new Researcher("crit", 16, 1, 1, global, true));
             super.instantiate(duration, gens, rsch);
-        } else if(event.equals("farm") || event.equals("science") || event.equals("pet show") || event.equals("architecture") || event.equals("infrastructure")){
+        } else if(event.equals("farm") || event.equals("science") || event.equals("pet show") || event.equals("architecture") || event.equals("infrastructure")){ //updated
             int length = 52;
             Time duration = new Time(length + "h");
             Generator[][] gens;
@@ -302,12 +306,12 @@ public class Event extends Balance{
             global.add(1);
             global.add(2);
             rsch.add(new Researcher("prod", 1, 2, 4, i1));
+            rsch.add(new Researcher("com", 1, 3, 2, i1));
             rsch.add(new Researcher("prod", 1, 6, 4, i2));
+            rsch.add(new Researcher("com", 1, 7, 2, i2));
             rsch.add(new Researcher("prod", 1, 5, 4, global));
             rsch.add(new Researcher("luck", 0.00, 0.12, 0.00, global));
-            rsch.add(new Researcher("com", 1, 3, 2, i1));
-            rsch.add(new Researcher("com", 1, 7, 2, i2));
-            rsch.add(new Researcher("crit", 32, 1, 1, global));
+            rsch.add(new Researcher("crit", 32, 1, 1, global, true));
             super.instantiate(duration, gens, rsch);
         } else if(event.equals("svs") || event.equals("vehicle show")){
             int length = 52;
@@ -333,11 +337,11 @@ public class Event extends Balance{
             global.add(1);
             global.add(2);
             rsch.add(new SVSResearcher(32, i1));
+            rsch.add(new Researcher("com", 1, 8, 4, i1));
             rsch.add(new SVSResearcher(64, i2));
+            rsch.add(new Researcher("com", 1, 8, 2, i2));
             rsch.add(new Researcher("prod", 1, 5, 4, global));
             rsch.add(new Researcher("luck", 0.00, 0.15, 0.00, global));
-            rsch.add(new Researcher("com", 1, 8, 4, i1));
-            rsch.add(new Researcher("com", 1, 8, 2, i2));
             super.instantiate(duration, gens, rsch);
         } else if(event.equals("monster hunt") || event.equals("halloween") || event.equals("mmh") || event.equals("anniversary") || event.equals("celebration") || event.equals("christmas") || event.equals("merry") || event.equals("santa") || event.equals("cockatrice") || event.equals("supreme") || event.equals("mlg") || event.equals("cnc") || event.equals("vacation") || event.equals("motherland games") || event.equals("supervillain") || event.equals("spooky") || event.equals("potato factory") || event.equals("suv")){
             int length = 268;
@@ -377,19 +381,19 @@ public class Event extends Balance{
             global.add(3);
             global.add(4);
             rsch.add(new Researcher("prod", 1, 2, 4, i1));
+            rsch.add(new Researcher("com", 1, 3, 2, i1));
             rsch.add(new Researcher("prod", 1, 4, 4, i2));
+            rsch.add(new Researcher("com", 1, 5, 2, i2));
             rsch.add(new Researcher("prod", 1, 6, 4, i3));
+            rsch.add(new Researcher("com", 1, 7, 2, i3));
             rsch.add(new Researcher("prod", 1, 8, 4, i4));
+            rsch.add(new Researcher("com", 1, 9, 2, i4));
             rsch.add(new Researcher("prod", 1, 5, 4, global));
             rsch.add(new Researcher("luck", 0.00, 0.12, 0.00, global));
             rsch.add(new Researcher("crit", 32, 8, 2, global));
-            rsch.add(new Researcher("com", 1, 3, 2, i1));
-            rsch.add(new Researcher("com", 1, 5, 2, i2));
-            rsch.add(new Researcher("com", 1, 7, 2, i3));
-            rsch.add(new Researcher("com", 1, 9, 2, i4));
             rsch.add(new Researcher("com", 1, 2, 2, global));
             super.instantiate(duration, gens, rsch);
-        } else if(event.equals("egypt") || event.equals("japan")){
+        } else if(event.equals("egypt") || event.equals("japan")){ //updated
             int length = 148;
             Time duration = new Time(length + "h");
             Generator[][] gens;
@@ -428,16 +432,16 @@ public class Event extends Balance{
             global.add(3);
             rsch.add(new Researcher("luck", 0.00, 0.12, 0.00, i1));
             rsch.add(new Researcher("crit", 8, 8, 2, i1));
+            rsch.add(new Researcher("com", 1, 6, 4, i1));
             rsch.add(new Researcher("luck", 0.00, 0.12, 0.00, i2));
             rsch.add(new Researcher("crit", 16, 8, 2, i2));
+            rsch.add(new Researcher("com", 1, 10, 4, i2));
             rsch.add(new Researcher("luck", 0.00, 0.12, 0.00, i3));
             rsch.add(new Researcher("crit", 32, 8, 2, i3));
-            rsch.add(new Researcher("prod", 1, 12, 4, global));
-            rsch.add(new Researcher("com", 1, 6, 4, i1));
-            rsch.add(new Researcher("com", 1, 10, 4, i2));
             rsch.add(new Researcher("com", 1, 14, 4, i3));
+            rsch.add(new Researcher("prod", 1, 12, 4, global));
             super.instantiate(duration, gens, rsch);
-        } else if(event.equals("scandinavia") || event.equals("scand")){
+        } else if(event.equals("scandinavia") || event.equals("scand")){ //updated
             int length = 148;
             Time duration = new Time(length + "h");
             Generator[][] gens;
@@ -469,17 +473,17 @@ public class Event extends Balance{
             global.add(3);
             rsch.add(new Researcher("prod", 1, 3, 3, i1));
             rsch.add(new Researcher("luck", 0.00, 0.0275, 0.0825, 0.055, i1));
+            rsch.add(new Researcher("com", 1, 4, 4, i1));
             rsch.add(new Researcher("prod", 1, 3, 3, i2));
             rsch.add(new Researcher("luck", 0.00, 0.0275, 0.0825, 0.055, i2));
+            rsch.add(new Researcher("com", 1, 8, 4, i2));
             rsch.add(new Researcher("prod", 1, 3, 3, i3));
             rsch.add(new Researcher("luck", 0.00, 0.0275, 0.0825, 0.055, i3));
-            rsch.add(new Researcher("prod", 1, 2, 4, global));
-            rsch.add(new Researcher("com", 1, 4, 4, i1));
-            rsch.add(new Researcher("com", 1, 8, 4, i2));
             rsch.add(new Researcher("com", 1, 12, 4, i3));
-            rsch.add(new Researcher("crit", 2, 1, 1, global));
+            rsch.add(new Researcher("prod", 1, 2, 4, global));
+            rsch.add(new Researcher("crit", 2, 1, 1, global, true));
             super.instantiate(duration, gens, rsch);
-        } else if(event.equals("careers") || event.equals("innovation")){
+        } else if(event.equals("careers") || event.equals("innovation")){ //updated 
             int length = 76;
             Time duration = new Time(length + "h");
             Generator[][] gens;
@@ -519,17 +523,17 @@ public class Event extends Balance{
             global.add(3);
             global.add(4);
             rsch.add(new Researcher("prod", 1, 2, 4, i1));
-            rsch.add(new Researcher("prod", 1, 4, 4, i2));
-            rsch.add(new Researcher("prod", 1, 6, 4, i3));
-            rsch.add(new Researcher("prod", 1, 8, 4, i4));
-            rsch.add(new Researcher("prod", 1, 5, 4, global));
             rsch.add(new Researcher("com", 1, 3, 2, i1));
+            rsch.add(new Researcher("prod", 1, 4, 4, i2));
             rsch.add(new Researcher("com", 1, 5, 2, i2));
+            rsch.add(new Researcher("prod", 1, 6, 4, i3));
             rsch.add(new Researcher("com", 1, 7, 2, i3));
+            rsch.add(new Researcher("prod", 1, 8, 4, i4));
             rsch.add(new Researcher("com", 1, 9, 2, i4));
-            rsch.add(new Researcher("crit", 2, 1, 1, global));
+            rsch.add(new Researcher("prod", 1, 5, 4, global));
+            rsch.add(new Researcher("crit", 2, 1, 1, global, true));
             super.instantiate(duration, gens, rsch);
-        } else if(event.equals("aztec")){
+        } else if(event.equals("aztec")){ //updated
             int length = 148;
             Time duration = new Time(length + "h");
             Generator[][] gens;
@@ -563,18 +567,19 @@ public class Event extends Balance{
             global.add(1);
             global.add(2);
             global.add(3);
-            rsch.add(new Researcher("prod", 1, 2, 4, global));
-            rsch.add(new Researcher("luck", 0.00, 0.15, 0.00, global));
             rsch.add(new Researcher("prod", 1, 2, 4, i1));
-            rsch.add(new Researcher("prod", 1, 2, 4, i2));
-            rsch.add(new Researcher("prod", 1, 2, 4, i3));
-            rsch.add(new Researcher("discount", 1, 1, 10, global));
             rsch.add(new Researcher("com", 1, 5, 2, i1));
+            rsch.add(new Researcher("prod", 1, 2, 4, i2));
             rsch.add(new Researcher("com", 1, 7, 2, i2));
+            rsch.add(new Researcher("prod", 1, 2, 4, i3));
             rsch.add(new Researcher("com", 1, 9, 2, i3));
+            rsch.add(new Researcher("prod", 1, 2, 4, global));
+            rsch.add(new Researcher("discount", 1, 1, 10, global));
+            rsch.add(new Researcher("luck", 0.00, 0.15, 0.00, global));
             rsch.add(new Researcher("com", 1, 3, 2, global));
+            rsch.add(new Researcher("crit", 256, 1, 1, global, true));
             super.instantiate(duration, gens, rsch);
-        } else if(event.equals("music")){
+        } else if(event.equals("music")){ //updated
             int length = 148;
             Time duration = new Time(length + "h");
             Generator[][] gens;
@@ -612,14 +617,14 @@ public class Event extends Balance{
             global.add(3);
             global.add(4);
             rsch.add(new Researcher("prod", 1, 15, 6, i1));
-            rsch.add(new Researcher("prod", 1, 18, 6, i2));
-            rsch.add(new Researcher("prod", 1, 21, 6, i3));
-            rsch.add(new Researcher("prod", 1, 24, 6, i4));
             rsch.add(new Researcher("com", 1, 5, 2, i1));
+            rsch.add(new Researcher("prod", 1, 18, 6, i2));
             rsch.add(new Researcher("com", 1, 7, 2, i2));
+            rsch.add(new Researcher("prod", 1, 21, 6, i3));
             rsch.add(new Researcher("com", 1, 9, 2, i3));
+            rsch.add(new Researcher("prod", 1, 24, 6, i4));
             rsch.add(new Researcher("com", 1, 10, 2, i4));
-            rsch.add(new Researcher("crit", 3, 1, 1, global));
+            rsch.add(new Researcher("crit", 3, 1, 1, global, true));
             super.instantiate(duration, gens, rsch);
         } else{
             System.out.println("Event name not recognized. Please try again.");

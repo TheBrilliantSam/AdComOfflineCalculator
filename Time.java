@@ -209,32 +209,36 @@ public class Time{
     }
     public String toString(){
         if(output == null){
-            if(days == 0){
-                String ret = "" + hrs + "h";
-                if(mins < 10){
-                    ret += "0";
+            if(getSecs().compareTo(new BigNum(0, 1)) == 0){
+                return "Instant";
+            } else{
+                if(days == 0){
+                    String ret = "" + hrs + "h";
+                    if(mins < 10){
+                        ret += "0";
+                    }
+                    ret += mins + "m";
+                    if(secs < 10){
+                        ret += "0";
+                    }
+                    ret += secs + "s";
+                    return ret;
+                } else {
+                    String ret = "" + days + "d";
+                    if(hrs < 10){
+                        ret += "0";
+                    }
+                    ret += hrs + "h";
+                    if(mins < 10){
+                        ret += "0";
+                    }
+                    ret += mins + "m";
+                    if(secs < 10){
+                        ret += "0";
+                    }
+                    ret += secs + "s";
+                    return ret;
                 }
-                ret += mins + "m";
-                if(secs < 10){
-                    ret += "0";
-                }
-                ret += secs + "s";
-                return ret;
-            } else {
-                String ret = "" + days + "d";
-                if(hrs < 10){
-                    ret += "0";
-                }
-                ret += hrs + "h";
-                if(mins < 10){
-                    ret += "0";
-                }
-                ret += mins + "m";
-                if(secs < 10){
-                    ret += "0";
-                }
-                ret += secs + "s";
-                return ret;
             }
         } else{
             return output;

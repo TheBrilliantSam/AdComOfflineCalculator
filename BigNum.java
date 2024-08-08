@@ -114,8 +114,16 @@ public class BigNum{
         return amount * Math.pow(10, exponent);
     }
     
+    public int toInteger(){
+        return (int)(amount * Math.pow(10, exponent) + 0.5);
+    }
+    
     public double getX(){
         return amount;
+    }
+    
+    public double roundX(int places){
+        return (int)(amount * Math.pow(10, places) + 0.5) / Math.pow(10, places);
     }
     
     public int getEXP(){

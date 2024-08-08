@@ -64,6 +64,15 @@ public class Operations{
         return finalArr;
     }
     
+    public static Time[] parseTimes(String str){
+        String[] arr = str.split(";");
+        Time[] ret = new Time[arr.length];
+        for(int i = 0; i < arr.length; i++){
+            ret[i] = new Time(arr[i]);
+        }
+        return ret;
+    }
+    
     /*public static int findBestNextGuess(int current, int max, int min, String descriptor){
         if(descriptor.equals("higher")){
             if(max == Integer.MAX_VALUE){
