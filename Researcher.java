@@ -134,6 +134,10 @@ public class Researcher{
         return none;
     }
     
+    public boolean isHidden(){
+        return hidden;
+    }
+    
     public String toString(int index){
         if(hidden){
             return "";

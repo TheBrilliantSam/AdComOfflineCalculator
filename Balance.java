@@ -6,8 +6,8 @@ public class Balance{
     private String eventName;
     private boolean debug = false;
     private boolean parseDebug = false;
-    private int threshold = 50;
-    private boolean useSpeedBoostsInstead = false;
+    private int threshold = 0;
+    private int numRares;
     
     private Generator[][] gens;
     
@@ -60,6 +60,12 @@ public class Balance{
         System.out.println("Length: " + length.toHourString() + " (" + duration + ")");
         System.out.println("Industries: " + getIndustries() + "\n");
         //System.out.println(java.time.LocalDateTime.now() + "——>" + "\n");
+        numRares = 0;
+        for(Researcher researchers : rsch){
+            if(!researchers.isHidden()){
+                numRares++;
+            }
+        }
     }
     
     public void instantiate(Generator[][] g, ArrayList<Researcher> r){
@@ -82,13 +88,12 @@ public class Balance{
         }
     }
     
-    public void offlineUntilResource(String target, int industry, String[][] amounts, int[][] commons, int[] rares, boolean boost, boolean reset, boolean print, boolean printAllIndustries, boolean emoji){
+    public void offlineUntilResource(AdComNum mission, int industry, String[][] amounts, int[][] commons, int[] rares, double boost, boolean reset, boolean print, boolean printAllIndustries, boolean emoji, boolean speedBoosts, boolean strength){
         setRares(rares);
         if(reset){
                 amounts[industry - 1][0] = "";
                 //System.out.println("RESET COMPLETE");
         }
-        AdComNum mission = new AdComNum(new BigNum(target));
         BigNum seconds = new BigNum(3600); // Start by trying 1 hour
         BigNum high = new BigNum(9.99, 2147483647);
         BigNum low = new BigNum(0);
@@ -152,22 +157,101 @@ public class Balance{
                 seconds = BigNum.add(seconds, new BigNum(1));
             }
             if(seconds.getEXP() > 8){
-                calculateOffline(industry, amounts, commons, rares, seconds, boost, false, reset, print, emoji);
+                calculateOffline(industry, amounts, commons, rares, seconds, boost, false, reset, print, emoji, speedBoosts, strength);
             } else{
-                calculateOffline(industry, amounts, commons, rares, seconds, boost, false, reset, print, emoji);
+                calculateOffline(industry, amounts, commons, rares, seconds, boost, false, reset, print, emoji, speedBoosts, strength);
             }
         }
     }
     
-    public BNandBool calculate(int industry, String[] amounts, int[] commons, int[] rares, BigNum secs, boolean boost, boolean ran, boolean reset, boolean print, int attempts){
+    public Time getTimeRequired(AdComNum mission, int industry, String[][] amounts, int[][] commons, int[] rares, double boost, boolean reset, boolean print, boolean printAllIndustries, boolean emoji, boolean speedBoosts, boolean strength){
+        setRares(rares);
+        if(reset){
+                amounts[industry - 1][0] = "";
+                //System.out.println("RESET COMPLETE");
+        }
+        BigNum seconds = new BigNum(3600); // Start by trying 1 hour
+        BigNum high = new BigNum(9.99, 2147483647);
+        BigNum low = new BigNum(0);
+        BigNum prev = new BigNum(0);
+        String[] amountsDup = new String[amounts[industry - 1].length];
+        String[] amountsDupBackup = new String[amounts[industry - 1].length];
+        System.arraycopy(amounts[industry - 1], 0, amountsDup, 0, amounts[industry - 1].length);
+        System.arraycopy(amounts[industry - 1], 0, amountsDupBackup, 0, amounts[industry - 1].length);
+        //System.out.println(Arrays.toString(amountsDupBackup));
+        boolean complete = false;
+        AdComNum result = new AdComNum(new BigNum(""));
+        if(debug) System.out.println("Attempts to Calculate:\n");
+        int attempts = 1;
+        while(!complete){
+            BNandBool compute = calculate(industry, amountsDup, commons[industry - 1], rares, seconds, boost, false, true, print, attempts);
+            if(!compute.getBOOL()){
+                break;
+            }
+            result = new AdComNum(compute.getBN());
+            //AdComNum result = calculateOffline(industry, String[][] amounts, commons, rares, new Time(seconds + "s"), boost, ran, reset, print);
+            if(debug && seconds.getEXP() > 8 && attempts > threshold) System.out.print("attempt: " + attempts + ", resource generated: " + result + ", time: " + new Time(seconds).toString() + ", compare: " + mission.compareTo(result) + ", ");
+            if(debug && seconds.getEXP() <= 8 && attempts > threshold) System.out.print("resource generated: " + result + ", time: " + new Time((int)seconds.toDouble()).toString() + ", compare: " + mission.compareTo(result) + ", ");
+            System.arraycopy(amountsDupBackup, 0, amountsDup, 0, amountsDup.length);
+            //System.out.println(Arrays.toString(amountsDup));
+            prev = seconds;
+            switch(mission.compareTo(result)){
+                case 0:
+                    complete = true;
+                    if(debug) System.out.println("exiting loop: target hit");
+                    break;
+                case 1:
+                    if(seconds.compareTo(low) == 1){
+                        low = seconds;
+                    }
+                    seconds = Operations.findBestNextGuess(seconds, high, low, "higher");
+                    break;
+                case -1:
+                    if(seconds.compareTo(high) == -1){
+                        high = seconds;
+                    }
+                    seconds = Operations.findBestNextGuess(seconds, high, low, "lower");
+            }
+            if(debug && attempts > threshold) System.out.println("high: " + high + ", low: " + low);
+            if(parseDebug && attempts > threshold) System.out.println("\n");
+            if(new BigNum(1).compareTo(BigNum.abs(BigNum.subtract(seconds, prev))) == 1){
+                if(debug) System.out.println("exiting loop: time convergence");
+                complete = true;
+            }
+            /*if(seconds > 864000000){
+                System.out.println("ERROR: Maximum sim time reached. (10000d simulated)");
+                break;
+            }*/
+            attempts++;
+        }
+        if(complete){
+            if(debug) System.out.println();
+            if(printAllIndustries){
+                industry = 0;
+            }
+            if(mission.compareTo(result) == 1){
+                seconds = BigNum.add(seconds, new BigNum(1));
+            }
+            if(seconds.compareTo(new BigNum(2147483647)) == 1){
+                return new Time(seconds, true);
+            } else{
+                return new Time((int)(seconds.toDouble()));
+            }
+        }
+        return new Time(0);
+    }
+    
+    public BNandBool calculate(int industry, String[] amounts, int[] commons, int[] rares, BigNum secs, double boost, boolean ran, boolean reset, boolean print, int attempts){
         boolean valid = true;
         if(amounts.length == 1){
             System.out.println("ERROR: No generator amounts entered in the target industry.");
             valid = false;
         }
         if(amounts.length - 1 > commons.length){
-            System.out.println("ERROR: Insufficient common cards assigned to generators in the target industry.");
-            valid = false;
+            //System.out.println("WARNING: Insufficient common cards assigned to generators in the target industry.");
+            int[] correctedCommons = new int[amounts.length - 1];
+            System.arraycopy(commons, 0, correctedCommons, 0, commons.length);
+            commons = correctedCommons;
         }
         if(valid){
             if(parseDebug && attempts > threshold) System.out.println(Arrays.toString(amounts));
@@ -201,16 +285,16 @@ public class Balance{
         }
     }
     
-    public void calculateOffline(int industry, String[][] amounts, int[][] commons, int[] rares, BigNum secs, boolean boost, boolean ran, boolean reset, boolean print, boolean emoji){
+    public void calculateOffline(int industry, String[][] amounts, int[][] commons, int[] rares, BigNum secs, double boost, boolean ran, boolean reset, boolean print, boolean emoji, boolean speedBoosts, boolean strength){
         Time dur = new Time(0);
-        if(secs.getEXP() > 8){
-            dur = new Time(secs);
+        if(secs.compareTo(new BigNum(2147483647)) == 1){
+            dur = new Time(secs, true);
         } else{
             dur = new Time((int)(secs.toDouble()));
         }
         boolean valid = true;
         if(industry == 0){
-            calculateAllIndustriesOffline(amounts, commons, rares, secs, boost, ran, reset, print, emoji);
+            calculateAllIndustriesOffline(amounts, commons, rares, secs, boost, ran, reset, print, emoji, speedBoosts, strength);
         }else{
             setRares(rares);
             if(reset){
@@ -225,14 +309,16 @@ public class Balance{
                     valid = false;
                 }
                 if(amounts[industry - 1].length - 1 > commons[industry - 1].length){
-                    System.out.println("ERROR: Insufficient common cards assigned to generators.");
-                    valid = false;
+                    System.out.println("WARNING: Insufficient common cards assigned to generators.");
+                    int[] correctedCommons = new int[amounts[industry - 1].length - 1];
+                    System.arraycopy(commons[industry - 1], 0, correctedCommons, 0, commons[industry - 1].length);
+                    commons[industry - 1] = correctedCommons;
                 }
                 String warnings = "";
                 if(Math.min(commons[industry - 1].length - 1, amounts[industry - 1].length - 2) > gens[industry - 1].length - 1){
                     warnings += "WARNING: Excess generators have been ignored.\n";
                 }
-                if(rares.length > rsch.size()){
+                if(rares.length > numRares){
                     warnings += "WARNING: Excess rare researchers have been ignored.\n";
                 }
                 if(warnings.length() > 0){
@@ -254,6 +340,9 @@ public class Balance{
                     amounts[industry - 1][Math.min(amounts[industry - 1].length - 1, gens[industry - 1].length)] = fix.toString();
                     boolean rand[] = new boolean[commons[industry - 1].length];
                     boolean resRand = false;
+                    BigNum valNum = new BigNum(amounts[industry - 1][1]);
+                    BigNum prev = gens[industry - 1][0].getPreviousStrength(rsch, commons[industry - 1][0], valNum, boost, industry);
+                    //System.out.println(prev);
                     for(int i = Math.min(Math.min(commons[industry - 1].length - 1, amounts[industry - 1].length - 2), gens[industry - 1].length - 1); i >= 0; i--){
                         String prSt = "         G" + (i + 1) + ": ";
                         if(i < 9){
@@ -310,8 +399,8 @@ public class Balance{
                             System.out.print(Integer.toHexString(commons[industry - 1][i]).toUpperCase());
                         }
                     }
-                    if(!emoji && !useSpeedBoostsInstead) System.out.println("\nCommon Cards: " + Arrays.toString(commons[industry - 1]));
-                    if(!emoji && useSpeedBoostsInstead){
+                    if(!emoji && !speedBoosts) System.out.println("\nCommon Cards: " + Arrays.toString(commons[industry - 1]));
+                    if(!emoji && speedBoosts){
                         System.out.print("\nCommon Cards: [");
                         for(int i = 0; i <= Math.min(Math.min(commons[industry - 1].length - 1, amounts[industry - 1].length - 2), gens[industry - 1].length - 1); i++){
                             BigNum speedBoost = gens[industry - 1][i].getSpeedBoost(commons[industry - 1][i]);
@@ -336,12 +425,12 @@ public class Balance{
                     }
                     System.out.println("]");
                     */
-                    BigNum valNum = new BigNum(amounts[industry - 1][1]);
-                    gens[industry - 1][0].printDetails(rsch, commons[industry - 1][0], valNum, boost, industry, dur, emoji);
+                    valNum = new BigNum(amounts[industry - 1][1]);
+                    gens[industry - 1][0].printDetails(rsch, commons[industry - 1][0], valNum, boost, industry, dur, emoji, strength, prev);
                     System.out.println();
                     //System.out.println("Luck Chance: " + rsch.get)
                 }
-                System.out.println("\n----------------------------------------------------\n");
+                System.out.println("\n-------------------------------------------------------------------\n");
             } else {
                 if(amounts[industry - 1].length == 1){
                     System.out.println("ERROR: No generator amounts entered.");
@@ -381,19 +470,39 @@ public class Balance{
         }
     }
     
-    public void calculateOffline(int industry, String[][] amounts, int[][] commons, int[] rares, String times, boolean boost, boolean ran, boolean reset, boolean print, boolean emoji){
+    public void calculateOffline(int industry, String[][] amounts, int[][] commons, int[] rares, String times, double boost, boolean ran, boolean reset, boolean print, boolean emoji, boolean speedBoosts, boolean strength){
         Time[] timeList = Operations.parseTimes(times);
         for(Time t : timeList){
-            calculateOffline(industry, amounts, commons, rares, t.getSecs(), boost, ran, reset, print, emoji);
+            calculateOffline(industry, amounts, commons, rares, t.getSecs(), boost, ran, reset, print, emoji, speedBoosts, strength);
         }
     }
     
-    public void calculateAllIndustriesOffline(String[][] amounts, int[][] commons, int[] rares, BigNum secs, boolean boost, boolean ran, boolean reset, boolean print, boolean emoji){
+    public void offlineUntilResource(String targets, String[][] amounts, int[][] commons, int[] rares, double boost, boolean reset, boolean print, boolean printAllIndustries, boolean emoji, boolean speedBoosts, boolean strength){
+        ACNandInteger[][] missionList = Operations.parseTargets(targets);
+        for(ACNandInteger[] a : missionList){
+            Time highest = new Time(0);
+            int ind = 0;
+            for(ACNandInteger b : a){
+                Time mission = getTimeRequired(b.getACN(), b.getINT(), amounts, commons, rares, boost, reset, print, printAllIndustries, emoji, speedBoosts, strength);
+                if(mission.compareTo(highest) == 1){
+                    highest = mission;
+                    ind = b.getINT();
+                }
+            }
+            if(printAllIndustries){
+                calculateOffline(0, amounts, commons, rares, highest.getSecs(), boost, false, reset, print, emoji, speedBoosts, strength);
+            } else{
+                calculateOffline(ind, amounts, commons, rares, highest.getSecs(), boost, false, reset, print, emoji, speedBoosts, strength);
+            }
+        }
+    }
+    
+    public void calculateAllIndustriesOffline(String[][] amounts, int[][] commons, int[] rares, BigNum secs, double boost, boolean ran, boolean reset, boolean print, boolean emoji, boolean speedBoosts, boolean strength){
         for(int i = 0; i < amounts.length; i++){
             if(i + 1 > getIndustries()){
-                System.out.println("ERROR: No such Industry " + (i + 1) + " exists for this event.\n\n----------------------------------------------------\n");
+                System.out.println("ERROR: No such Industry " + (i + 1) + " exists for this event.\n\n-------------------------------------------------------------------\n");
             } else{
-                calculateOffline(i + 1, amounts, commons, rares, secs, boost, ran, reset, print, emoji);
+                calculateOffline(i + 1, amounts, commons, rares, secs, boost, ran, reset, print, emoji, speedBoosts, strength);
             }
         }
     }

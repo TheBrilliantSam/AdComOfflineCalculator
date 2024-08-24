@@ -343,7 +343,7 @@ public class Event extends Balance{
             rsch.add(new Researcher("prod", 1, 5, 4, global));
             rsch.add(new Researcher("luck", 0.00, 0.15, 0.00, global));
             super.instantiate(duration, gens, rsch);
-        } else if(event.equals("monster hunt") || event.equals("halloween") || event.equals("mmh") || event.equals("anniversary") || event.equals("celebration") || event.equals("christmas") || event.equals("merry") || event.equals("santa") || event.equals("cockatrice") || event.equals("supreme") || event.equals("mlg") || event.equals("cnc") || event.equals("vacation") || event.equals("motherland games") || event.equals("supervillain") || event.equals("spooky") || event.equals("potato factory") || event.equals("suv")){
+        } else if(event.equals("dino") || event.equals("monster hunt") || event.equals("halloween") || event.equals("mmh") || event.equals("anniversary") || event.equals("celebration") || event.equals("christmas") || event.equals("merry") || event.equals("santa") || event.equals("cockatrice") || event.equals("supreme") || event.equals("mlg") || event.equals("cnc") || event.equals("vacation") || event.equals("motherland games") || event.equals("supervillain") || event.equals("spooky") || event.equals("potato factory") || event.equals("suv")){
             int length = 268;
             Time duration = new Time(length + "h");
             Generator[][] gens;
@@ -631,7 +631,7 @@ public class Event extends Balance{
             valid = false;
         }
         if(valid){
-            System.out.println("----------------------------------------------------\n");
+            System.out.println("-------------------------------------------------------------------\n");
         }
     }
     

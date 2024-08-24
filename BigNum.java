@@ -10,7 +10,30 @@ public class BigNum{
     }
     
     public BigNum(AdComNum value){
-        this(value.toString());
+        amount = value.getValue();
+        String suffix = value.getSuffix();
+        if(suffix.length() == 0){
+            exponent = 0;
+        } else if(suffix.length() == 1){
+            if(suffix.equals("K")){
+                exponent = 3;
+            }
+            if(suffix.equals("M")){
+                exponent = 6;
+            }
+            if(suffix.equals("B")){
+                exponent = 9;
+            }
+            if(suffix.equals("T")){
+                exponent = 12;
+            }
+        } else if(suffix.equals("KFC")){
+            exponent = 123;
+        } else{
+            exponent = ((suffix.length() - 2) * 78) + (((int)(suffix.charAt(0)) - 65) * 3) + 15;
+        }
+    
+        this.update();
     }
     
     public BigNum(double d){
@@ -116,6 +139,10 @@ public class BigNum{
     
     public int toInteger(){
         return (int)(amount * Math.pow(10, exponent) + 0.5);
+    }
+    
+    public int toIntegerUnrounded(){
+        return (int)(amount * Math.pow(10, exponent));
     }
     
     public double getX(){
@@ -225,6 +252,44 @@ public class BigNum{
         }
         res+=exponent;
         return res;
+    }
+    
+    public String toExtendedString(){
+        String result = "";
+        if(exponent == 0){
+            result += roundX(3);
+            for(int i = ("" + roundX(3)).length(); i < 5; i++){
+                result += "0";
+            }
+        } else if(exponent == 1){
+            result += roundX(2) * 10;
+            for(int i = ("" + roundX(2) * 10).length(); i < 5; i++){
+                result += "0";
+            }
+        } else if(exponent == 2){
+            result += roundX(1) * 100;
+            for(int i = ("" + roundX(1) * 100).length(); i < 5; i++){
+                result += "0";
+            }
+        } else if(compareTo(new BigNum(2147483647)) <= 0){
+            String intgr = "" + toInteger();
+            for(int i = intgr.length() - 3; i > 0; i -= 3){
+                intgr = intgr.substring(0, i) + "," + intgr.substring(i, intgr.length());
+            }
+            result += intgr;
+        } else{
+            String res = "" + roundX(3);
+            for(int i = ("" + roundX(3)).length(); i < 5; i++){
+                result += "0";
+            }
+            res+="E";
+            if(exponent >= 0){
+                res+= "+";
+            }
+            res+=exponent;
+            result += res;
+        }
+        return result;
     }
     
     /*public static BigNum round(BigNum d1, int decimals){
